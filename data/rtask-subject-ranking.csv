@@ -1,100 +1,104 @@
  sid  |   code   | stid | nitems 
 ------+----------+------+--------
  5623 | r2tHk8QT |   14 |    179
+ 5771 | r2tujPkP |   14 |    131
  5203 | r2t8QE55 |   14 |    120
  5239 | r2t2Byaa |   14 |    120
- 5502 | r2tD7J6j |   14 |    110
  5480 | r2tQvDjN |   14 |    110
- 5264 | r2thkEG8 |   14 |     99
+ 5502 | r2tD7J6j |   14 |    110
  5313 | r2tk84uF |   14 |     99
- 5648 | r2tsw3jd |   14 |     80
+ 5264 | r2thkEG8 |   14 |     99
+ 5737 | r2tTGWKR |   14 |     97
  5190 | r2tLjp8Q |   14 |     80
+ 5648 | r2tsw3jd |   14 |     80
  5202 | r2twYcEW |   14 |     75
  5666 | r2tG8ZAn |   14 |     63
  5353 | r2tidQ2F |   14 |     60
  5104 | r1tc8RBE |   13 |     57
  5173 | r2tNz9sZ |   14 |     56
- 5276 | r2tYsteB |   14 |     50
- 5621 | r2tBze4X |   14 |     50
- 5277 | r2t7HF9m |   14 |     50
- 5692 | r2tgGWag |   14 |     50
- 5547 | r2tvnaHZ |   14 |     50
  5467 | r2tUVi36 |   14 |     50
- 5408 | r2t3ZUj7 |   14 |     50
  5451 | r2tSKkEq |   14 |     50
+ 5547 | r2tvnaHZ |   14 |     50
+ 5692 | r2tgGWag |   14 |     50
+ 5408 | r2t3ZUj7 |   14 |     50
+ 5277 | r2t7HF9m |   14 |     50
+ 5621 | r2tBze4X |   14 |     50
+ 5276 | r2tYsteB |   14 |     50
  5307 | r2tuzTns |   14 |     46
  5189 | r2tXRyHP |   14 |     42
- 5351 | r2thagxg |   14 |     40
- 5163 | r2t89Wk5 |   14 |     40
- 5164 | r2t8tSwQ |   14 |     40
  5236 | r2tWPBrK |   14 |     40
- 5673 | r2tSqcgh |   14 |     40
  5222 | r2toMeP4 |   14 |     40
- 5058 | r1tcK4sx |   13 |     40
- 5715 | r2tscaNf |   14 |     40
  5691 | r2tvLbim |   14 |     40
+ 5673 | r2tSqcgh |   14 |     40
+ 5732 | r2tqPLsH |   14 |     40
+ 5164 | r2t8tSwQ |   14 |     40
+ 5351 | r2thagxg |   14 |     40
+ 5058 | r1tcK4sx |   13 |     40
+ 5163 | r2t89Wk5 |   14 |     40
+ 5715 | r2tscaNf |   14 |     40
  5588 | r2tUxYGg |   14 |     40
  5368 | r2tpqRvE |   14 |     39
  5448 | r2tmTKZ5 |   14 |     38
- 5169 | r2tztwTG |   14 |     30
- 5665 | r2tdwxde |   14 |     30
- 5521 | r2t958CB |   14 |     30
- 5522 | r2to854V |   14 |     30
- 5527 | r2trF2Gw |   14 |     30
- 5663 | r2tLmjr4 |   14 |     30
- 5567 | r2ts27va |   14 |     30
- 5529 | r1tk9682 |   13 |     30
- 5242 | r2tFpTH6 |   14 |     30
- 5196 | r2tggePt |   14 |     30
- 5658 | r2tr73yr |   14 |     30
- 5564 | r1t5rv2C |   13 |     30
- 5260 | r2tLpppe |   14 |     30
- 5630 | r2tkCtwL |   14 |     30
- 5179 | r2tp6ECB |   14 |     30
- 5581 | r2tSy8gV |   14 |     30
- 5225 | r2tQTCKG |   14 |     30
- 5224 | r2tQCK8v |   14 |     30
- 5052 | r1t3gZ6j |   13 |     30
- 5234 | r2ttqL4i |   14 |     30
- 5148 | r1tdJZ2u |   13 |     30
- 5432 | r2tgzcdA |   14 |     30
- 5415 | r2tZiJHT |   14 |     30
- 5410 | r2tfHjNJ |   14 |     30
- 5262 | r2tuPW8q |   14 |     30
- 5542 | r2thvd9e |   14 |     30
- 5077 | r1t9mrsR |   13 |     30
- 5407 | r2tJk8oM |   14 |     30
- 5400 | r2tXk29e |   14 |     30
- 5083 | r1tQsRg9 |   13 |     30
  5363 | r2tSRtWL |   14 |     30
  5362 | r2tPRD8S |   14 |     30
- 5605 | r2tcRvLd |   14 |     30
- 5597 | r1tq2isb |   13 |     30
- 5355 | r2tC7s5f |   14 |     30
- 5279 | r2taYns5 |   14 |     30
  5301 | r2tFCPnn |   14 |     30
  5341 | r2tv6crZ |   14 |     30
  5340 | r2ts4vm7 |   14 |     30
- 5717 | r2tAyuht |   14 |     30
  5339 | r2tnVJUr |   14 |     30
+ 5717 | r2tAyuht |   14 |     30
  5336 | r2tZYXvD |   14 |     30
- 5280 | r2tcCYr6 |   14 |     30
  5332 | r2ttKgJu |   14 |     30
  5331 | r2tk2rc2 |   14 |     30
  5325 | r2tPZyon |   14 |     30
- 5675 | r2t67GDT |   14 |     30
  5324 | r2trrowP |   14 |     30
  5322 | r2tc74HC |   14 |     30
- 5290 | r2tNDjFr |   14 |     30
- 5310 | r2tJGAj3 |   14 |     30
- 5291 | r2t7tek4 |   14 |     30
+ 5605 | r2tcRvLd |   14 |     30
+ 5597 | r1tq2isb |   13 |     30
+ 5355 | r2tC7s5f |   14 |     30
  5298 | r2t7Je75 |   14 |     30
+ 5291 | r2t7tek4 |   14 |     30
+ 5581 | r2tSy8gV |   14 |     30
+ 5290 | r2tNDjFr |   14 |     30
+ 5280 | r2tcCYr6 |   14 |     30
+ 5279 | r2taYns5 |   14 |     30
+ 5148 | r1tdJZ2u |   13 |     30
+ 5567 | r2ts27va |   14 |     30
+ 5564 | r1t5rv2C |   13 |     30
+ 5542 | r2thvd9e |   14 |     30
+ 5262 | r2tuPW8q |   14 |     30
+ 5529 | r1tk9682 |   13 |     30
+ 5169 | r2tztwTG |   14 |     30
+ 5527 | r2trF2Gw |   14 |     30
+ 5522 | r2to854V |   14 |     30
+ 5260 | r2tLpppe |   14 |     30
+ 5242 | r2tFpTH6 |   14 |     30
+ 5052 | r1t3gZ6j |   13 |     30
+ 5179 | r2tp6ECB |   14 |     30
+ 5521 | r2t958CB |   14 |     30
+ 5234 | r2ttqL4i |   14 |     30
  5229 | r2tYhuhn |   14 |     30
+ 5675 | r2t67GDT |   14 |     30
+ 5739 | r2tqJNGc |   14 |     30
+ 5225 | r2tQTCKG |   14 |     30
+ 5224 | r2tQCK8v |   14 |     30
+ 5196 | r2tggePt |   14 |     30
+ 5665 | r2tdwxde |   14 |     30
+ 5663 | r2tLmjr4 |   14 |     30
+ 5658 | r2tr73yr |   14 |     30
+ 5077 | r1t9mrsR |   13 |     30
+ 5432 | r2tgzcdA |   14 |     30
+ 5415 | r2tZiJHT |   14 |     30
+ 5083 | r1tQsRg9 |   13 |     30
+ 5410 | r2tfHjNJ |   14 |     30
+ 5407 | r2tJk8oM |   14 |     30
+ 5630 | r2tkCtwL |   14 |     30
+ 5400 | r2tXk29e |   14 |     30
+ 5310 | r2tJGAj3 |   14 |     30
  5302 | r2tBmjy5 |   14 |     29
  5443 | r2t2aeVp |   14 |     28
  5033 | r1tjGcnU |   13 |     25
  5613 | r2t3M39F |   14 |     23
- 5295 | r2t96Q5R |   14 |     20
+ 5569 | r2tn5cpQ |   14 |     20
  5009 | r1trwLeT |   13 |     20
  5018 | r1tTucFZ |   13 |     20
  5020 | r1t7haNt |   13 |     20
@@ -183,6 +187,7 @@
  5289 | r2tb4WAN |   14 |     20
  5293 | r2t3QEJD |   14 |     20
  5294 | r2tmxgxq |   14 |     20
+ 5295 | r2t96Q5R |   14 |     20
  5296 | r2tYQeZA |   14 |     20
  5299 | r2tDQVnQ |   14 |     20
  5300 | r2tWbMPG |   14 |     20
@@ -306,7 +311,6 @@
  5558 | r2tcKDA6 |   14 |     20
  5562 | r1tV7yUy |   13 |     20
  5565 | r2tyTxDf |   14 |     20
- 5569 | r2tn5cpQ |   14 |     20
  5572 | r2tRUxkY |   14 |     20
  5575 | r2tMimUy |   14 |     20
  5576 | r1tjrZXj |   13 |     20
@@ -372,234 +376,259 @@
  5700 | r2tEqGoz |   14 |     20
  5701 | r2tW4bsk |   14 |     20
  5710 | r2tK533E |   14 |     20
- 5004 | r1tY2aGp |   13 |     19
- 5454 | r2th4m8d |   14 |     19
+ 5719 | r2tMgqt8 |   14 |     20
+ 5724 | r2tbasiu |   14 |     20
+ 5725 | r2tTNVT2 |   14 |     20
+ 5731 | r2tqu6VP |   14 |     20
+ 5744 | r2tuEocj |   14 |     20
+ 5747 | r2twsHCN |   14 |     20
+ 5750 | r2tpq9wp |   14 |     20
+ 5756 | r2tMnKEC |   14 |     20
+ 5760 | r2ttGNbq |   14 |     20
+ 5761 | r2tv7SDJ |   14 |     20
+ 5764 | r2tkDD7a |   14 |     20
  5636 | r2tTJ5RP |   14 |     19
  5653 | r2tpaca2 |   14 |     19
+ 5454 | r2th4m8d |   14 |     19
+ 5004 | r1tY2aGp |   13 |     19
  5088 | r1tQh7Xi |   13 |     19
  5347 | r2tjgXMb |   14 |     17
  5561 | r2tbrRFn |   14 |     17
  5566 | r2tvAfSL |   14 |     17
  5624 | r2tWCsZG |   14 |     16
- 5574 | r2t6PYx5 |   14 |     15
  5145 | r1tuJGkk |   13 |     15
  5215 | r2thzCNw |   14 |     15
  5669 | r2tBEUdd |   14 |     15
- 5438 | r2t743nz |   14 |     14
- 5072 | r1tg2SEW |   13 |     14
- 5661 | r2t2S6bB |   14 |     14
- 5073 | r1tDsK3Z |   13 |     14
+ 5574 | r2t6PYx5 |   14 |     15
  5216 | r2tYmxg8 |   14 |     14
+ 5073 | r1tDsK3Z |   13 |     14
+ 5661 | r2t2S6bB |   14 |     14
+ 5072 | r1tg2SEW |   13 |     14
+ 5438 | r2t743nz |   14 |     14
  5006 | r1taxUhX |   13 |     13
  5093 | r1tUTMaJ |   13 |     13
  5181 | r2tyfZoU |   14 |     13
- 5515 | r2tdXSXW |   14 |     12
- 5150 | r1tKmb7A |   13 |     12
- 5245 | r2tLuXYx |   14 |     12
  5097 | r1t8pKiE |   13 |     12
  5317 | r2tGV3ai |   14 |     12
+ 5515 | r2tdXSXW |   14 |     12
+ 5245 | r2tLuXYx |   14 |     12
+ 5150 | r1tKmb7A |   13 |     12
+ 5081 | r1teNjRL |   13 |     11
+ 5047 | r1tmM4QH |   13 |     11
+ 5042 | r1tXKd4A |   13 |     11
  5250 | r2tAh7or |   14 |     11
- 5384 | r2tkQHHE |   14 |     11
- 5513 | r2tX3BBv |   14 |     11
  5188 | r2tfYaPA |   14 |     11
  5098 | r1tME3is |   13 |     11
  5031 | r1tvTv2Q |   13 |     11
- 5081 | r1teNjRL |   13 |     11
+ 5513 | r2tX3BBv |   14 |     11
  5393 | r2tAhVab |   14 |     11
- 5042 | r1tXKd4A |   13 |     11
- 5047 | r1tmM4QH |   13 |     11
- 5593 | r2tMqJen |   14 |     10
- 5705 | r2tdW9rx |   14 |     10
- 5149 | r1tjfTo9 |   13 |     10
- 5147 | r1tj3QGk |   13 |     10
- 5655 | r2t6DgiL |   14 |     10
- 5265 | r2tSGyvP |   14 |     10
- 5484 | r2ty6ThY |   14 |     10
- 5596 | r2t5exWF |   14 |     10
- 5269 | r2twYDDQ |   14 |     10
- 5685 | r2tDoHxd |   14 |     10
- 5599 | r2t4agZM |   14 |     10
- 5657 | r2tEfnRj |   14 |     10
- 5490 | r2t2peTG |   14 |     10
- 5144 | r1tp3XVs |   13 |     10
- 5142 | r1tDwEsV |   13 |     10
- 5492 | r2tfvcSc |   14 |     10
- 5141 | r1t6XqR9 |   13 |     10
- 5135 | r1tpYt8P |   13 |     10
- 5493 | r2tC8TEL |   14 |     10
- 5659 | r2tGzBqX |   14 |     10
- 5495 | r2tGEuTL |   14 |     10
- 5496 | r2tzTgDi |   14 |     10
+ 5384 | r2tkQHHE |   14 |     11
  5497 | r2tyVNYv |   14 |     10
- 5286 | r2tyrECf |   14 |     10
- 5287 | r2t4U7iJ |   14 |     10
  5499 | r2tPGcnk |   14 |     10
- 5134 | r1t3QQor |   13 |     10
- 5133 | r1tmtdRp |   13 |     10
- 5292 | r2txuCBz |   14 |     10
  5500 | r2t2fEzR |   14 |     10
- 5687 | r2tLfncQ |   14 |     10
- 5046 | r1tQdi9K |   13 |     10
- 5030 | r1tthgLT |   13 |     10
- 5504 | r2tjQNbC |   14 |     10
- 5606 | r2tAqs7g |   14 |     10
- 5304 | r2tePYp5 |   14 |     10
- 5305 | r2tY6ahB |   14 |     10
- 5119 | r1ttCFB6 |   13 |     10
- 5308 | r2tTAFyN |   14 |     10
- 5309 | r2tX7xSc |   14 |     10
- 5610 | r2tGLbzM |   14 |     10
- 5117 | r1tokBU3 |   13 |     10
- 5509 | r2t7wTRM |   14 |     10
- 5017 | r1tkLQvn |   13 |     10
- 5029 | r1twQY9Y |   13 |     10
- 5512 | r2t67EtK |   14 |     10
- 5113 | r1tmvfDs |   13 |     10
- 5614 | r2tVJcGg |   14 |     10
- 5112 | r1twLqKk |   13 |     10
- 5109 | r1tx3eCo |   13 |     10
- 5326 | r2tsQKjA |   14 |     10
- 5327 | r2twMJKr |   14 |     10
- 5517 | r2t6hUQv |   14 |     10
- 5330 | r2tH2ap2 |   14 |     10
- 5106 | r1tUzoPT |   13 |     10
- 5333 | r2t7mHRi |   14 |     10
- 5689 | r2thqvms |   14 |     10
- 5335 | r2tD8qW2 |   14 |     10
- 5103 | r1twopGq |   13 |     10
- 5016 | r1t7hhY9 |   13 |     10
- 5101 | r1tWRSpy |   13 |     10
- 5520 | r2t6v2RH |   14 |     10
- 5345 | r2tPkqRy |   14 |     10
- 5045 | r1tpjNTm |   13 |     10
- 5044 | r1trviQN |   13 |     10
- 5096 | r1tvKv2o |   13 |     10
- 5354 | r2t3Ze9v |   14 |     10
- 5091 | r1tzNNPr |   13 |     10
- 5524 | r2tcWKDx |   14 |     10
- 5008 | r1tMkUHy |   13 |     10
- 5007 | r1tgFczu |   13 |     10
- 5545 | r2tD3MM2 |   14 |     10
- 5197 | r2tveUPf |   14 |     10
- 5199 | r2tUhssa |   14 |     10
- 5193 | r2tHnTKQ |   14 |     10
- 5712 | r2t37wC6 |   14 |     10
- 5206 | r2tgXmK3 |   14 |     10
- 5459 | r2tRgUrM |   14 |     10
- 5460 | r2tgwQnP |   14 |     10
- 5036 | r1t4xwMo |   13 |     10
- 5714 | r2tusAVS |   14 |     10
- 5211 | r2tFq75M |   14 |     10
- 5584 | r2t882fr |   14 |     10
- 5218 | r2tTYWEb |   14 |     10
- 5220 | r2tNwaxA |   14 |     10
- 5223 | r2tBPNMG |   14 |     10
- 5177 | r2tYAMCx |   14 |     10
- 5176 | r2tMHZy4 |   14 |     10
- 5585 | r2tb24HJ |   14 |     10
- 5049 | r1tutkbP |   13 |     10
- 5175 | r2t9zfsz |   14 |     10
- 5230 | r2tdqtHN |   14 |     10
- 5681 | r2tvKZdA |   14 |     10
- 5035 | r1t5wdYo |   13 |     10
  5172 | r2t3QLG3 |   14 |     10
- 5471 | r2tvDtE2 |   14 |     10
  5167 | r2txXncn |   14 |     10
- 5237 | r2tGaewp |   14 |     10
  5153 | r1tzGMsr |   13 |     10
- 5590 | r2tKjYrf |   14 |     10
- 5243 | r2t8YpEo |   14 |     10
- 5475 | r2tLQUbG |   14 |     10
- 5247 | r2trGRL6 |   14 |     10
- 5476 | r2tje2Dp |   14 |     10
- 5702 | r2tQbYw3 |   14 |     10
- 5251 | r2t5rWcu |   14 |     10
- 5253 | r2tLgkne |   14 |     10
- 5412 | r2tLUvDQ |   14 |     10
- 5553 | r2tdWpRr |   14 |     10
- 5633 | r2tay5NK |   14 |     10
- 5634 | r2tBuCig |   14 |     10
- 5557 | r2tPZUAk |   14 |     10
- 5421 | r2t9r9yz |   14 |     10
- 5422 | r2tZqHAM |   14 |     10
- 5424 | r2tqXV4V |   14 |     10
- 5559 | r2t2SjoD |   14 |     10
- 5563 | r2tAYJKk |   14 |     10
- 5071 | r1t6yTer |   13 |     10
- 5433 | r2tcpsgU |   14 |     10
- 5010 | r1t9oCJZ |   13 |     10
- 5436 | r2tXJDR7 |   14 |     10
- 5439 | r2tjiNC5 |   14 |     10
- 5037 | r1ttAsVg |   13 |     10
- 5441 | r2tPSSE3 |   14 |     10
- 5068 | r1thZLaL |   13 |     10
- 5639 | r2tgPZEF |   14 |     10
- 5570 | r2t7UgLM |   14 |     10
- 5571 | r2tRkdJ5 |   14 |     10
- 5640 | r2tvhtxG |   14 |     10
- 5449 | r2tiFDNQ |   14 |     10
- 5573 | r2tixyFc |   14 |     10
- 5641 | r2trUhxy |   14 |     10
- 5697 | r2tFsVA8 |   14 |     10
- 5677 | r2tqPnPg |   14 |     10
- 5087 | r1t8AbEP |   13 |     10
- 5041 | r1tGfPxE |   13 |     10
- 5366 | r2tUGqzM |   14 |     10
- 5367 | r2tzGHjy |   14 |     10
- 5084 | r1t2mtaS |   13 |     10
- 5026 | r1tM8jwj |   13 |     10
- 5371 | r2tSDf4D |   14 |     10
- 5533 | r2taLeUp |   14 |     10
- 5373 | r2tBC4TB |   14 |     10
- 5375 | r2tttnXm |   14 |     10
- 5534 | r2t7n4cn |   14 |     10
- 5378 | r2tqNL6K |   14 |     10
- 5671 | r2tXi5fg |   14 |     10
- 5381 | r2tNhLbG |   14 |     10
- 5709 | r2tihWpd |   14 |     10
- 5385 | r2t9GTW4 |   14 |     10
- 5540 | r2tgTmGC |   14 |     10
- 5025 | r1trayET |   13 |     10
- 5040 | r1tN3vPz |   13 |     10
- 5389 | r2tDuLhq |   14 |     10
- 5544 | r2t39337 |   14 |     10
- 5391 | r2tEhYEf |   14 |     10
- 5195 | r2tGyds2 |   14 |     10
- 5394 | r2tbp6ao |   14 |     10
- 5395 | r2t5jTae |   14 |     10
+ 5265 | r2tSGyvP |   14 |     10
+ 5742 | r2tNZ2dZ |   14 |     10
+ 5504 | r2tjQNbC |   14 |     10
+ 5269 | r2twYDDQ |   14 |     10
+ 5770 | r2tSNbrF |   14 |     10
+ 5030 | r1tthgLT |   13 |     10
  5696 | r2t4NcBq |   14 |     10
  5632 | r1tCocBH |   13 |     10
+ 5509 | r2t7wTRM |   14 |     10
+ 5633 | r2tay5NK |   14 |     10
+ 5149 | r1tjfTo9 |   13 |     10
+ 5634 | r2tBuCig |   14 |     10
+ 5147 | r1tj3QGk |   13 |     10
+ 5512 | r2t67EtK |   14 |     10
+ 5517 | r2t6hUQv |   14 |     10
+ 5286 | r2tyrECf |   14 |     10
+ 5287 | r2t4U7iJ |   14 |     10
+ 5144 | r1tp3XVs |   13 |     10
+ 5142 | r1tDwEsV |   13 |     10
+ 5292 | r2txuCBz |   14 |     10
+ 5697 | r2tFsVA8 |   14 |     10
+ 5520 | r2t6v2RH |   14 |     10
+ 5049 | r1tutkbP |   13 |     10
+ 5141 | r1t6XqR9 |   13 |     10
+ 5639 | r2tgPZEF |   14 |     10
+ 5524 | r2tcWKDx |   14 |     10
+ 5135 | r1tpYt8P |   13 |     10
+ 5134 | r1t3QQor |   13 |     10
+ 5640 | r2tvhtxG |   14 |     10
+ 5304 | r2tePYp5 |   14 |     10
+ 5305 | r2tY6ahB |   14 |     10
+ 5641 | r2trUhxy |   14 |     10
+ 5133 | r1tmtdRp |   13 |     10
+ 5308 | r2tTAFyN |   14 |     10
+ 5309 | r2tX7xSc |   14 |     10
+ 5746 | r2tXBmkP |   14 |     10
+ 5046 | r1tQdi9K |   13 |     10
+ 5763 | r2txeNJb |   14 |     10
+ 5748 | r2t6DmD8 |   14 |     10
+ 5749 | r2tDVn7Q |   14 |     10
+ 5533 | r2taLeUp |   14 |     10
+ 5534 | r2t7n4cn |   14 |     10
+ 5702 | r2tQbYw3 |   14 |     10
+ 5119 | r1ttCFB6 |   13 |     10
+ 5326 | r2tsQKjA |   14 |     10
+ 5327 | r2twMJKr |   14 |     10
+ 5029 | r1twQY9Y |   13 |     10
+ 5330 | r2tH2ap2 |   14 |     10
+ 5117 | r1tokBU3 |   13 |     10
+ 5113 | r1tmvfDs |   13 |     10
+ 5333 | r2t7mHRi |   14 |     10
+ 5705 | r2tdW9rx |   14 |     10
+ 5335 | r2tD8qW2 |   14 |     10
+ 5112 | r1twLqKk |   13 |     10
+ 5109 | r1tx3eCo |   13 |     10
+ 5106 | r1tUzoPT |   13 |     10
+ 5540 | r2tgTmGC |   14 |     10
+ 5345 | r2tPkqRy |   14 |     10
+ 5709 | r2tihWpd |   14 |     10
+ 5045 | r1tpjNTm |   13 |     10
+ 5544 | r2t39337 |   14 |     10
+ 5103 | r1twopGq |   13 |     10
+ 5101 | r1tWRSpy |   13 |     10
+ 5354 | r2t3Ze9v |   14 |     10
+ 5545 | r2tD3MM2 |   14 |     10
+ 5044 | r1trviQN |   13 |     10
  5550 | r2tk9GXn |   14 |     10
+ 5096 | r1tvKv2o |   13 |     10
  5551 | r2tKryXV |   14 |     10
- 5078 | r1tpFEMk |   13 |     10
- 5076 | r1tGiZth |   13 |     10
  5552 | r2tRQCmF |   14 |     10
+ 5366 | r2tUGqzM |   14 |     10
+ 5367 | r2tzGHjy |   14 |     10
+ 5681 | r2tvKZdA |   14 |     10
+ 5476 | r2tje2Dp |   14 |     10
+ 5036 | r1t4xwMo |   13 |     10
+ 5199 | r2tUhssa |   14 |     10
+ 5614 | r2tVJcGg |   14 |     10
+ 5206 | r2tgXmK3 |   14 |     10
+ 5734 | r2tdR3HG |   14 |     10
+ 5068 | r1thZLaL |   13 |     10
+ 5007 | r1tgFczu |   13 |     10
+ 5211 | r2tFq75M |   14 |     10
+ 5484 | r2ty6ThY |   14 |     10
+ 5218 | r2tTYWEb |   14 |     10
+ 5220 | r2tNwaxA |   14 |     10
+ 5197 | r2tveUPf |   14 |     10
+ 5223 | r2tBPNMG |   14 |     10
+ 5195 | r2tGyds2 |   14 |     10
+ 5193 | r2tHnTKQ |   14 |     10
+ 5685 | r2tDoHxd |   14 |     10
+ 5687 | r2tLfncQ |   14 |     10
+ 5230 | r2tdqtHN |   14 |     10
+ 5035 | r1t5wdYo |   13 |     10
+ 5689 | r2thqvms |   14 |     10
+ 5490 | r2t2peTG |   14 |     10
+ 5177 | r2tYAMCx |   14 |     10
+ 5237 | r2tGaewp |   14 |     10
+ 5176 | r2tMHZy4 |   14 |     10
+ 5492 | r2tfvcSc |   14 |     10
+ 5175 | r2t9zfsz |   14 |     10
+ 5243 | r2t8YpEo |   14 |     10
+ 5493 | r2tC8TEL |   14 |     10
+ 5247 | r2trGRL6 |   14 |     10
+ 5016 | r1t7hhY9 |   13 |     10
+ 5495 | r2tGEuTL |   14 |     10
+ 5251 | r2t5rWcu |   14 |     10
+ 5496 | r2tzTgDi |   14 |     10
+ 5253 | r2tLgkne |   14 |     10
+ 5433 | r2tcpsgU |   14 |     10
+ 5751 | r2tvDJMA |   14 |     10
+ 5436 | r2tXJDR7 |   14 |     10
+ 5439 | r2tjiNC5 |   14 |     10
+ 5441 | r2tPSSE3 |   14 |     10
+ 5076 | r1tGiZth |   13 |     10
+ 5590 | r2tKjYrf |   14 |     10
+ 5722 | r2t5iCWy |   14 |     10
+ 5671 | r2tXi5fg |   14 |     10
+ 5593 | r2tMqJen |   14 |     10
+ 5449 | r2tiFDNQ |   14 |     10
+ 5723 | r2toEa5c |   14 |     10
+ 5596 | r2t5exWF |   14 |     10
+ 5766 | r2twRdkh |   14 |     10
+ 5599 | r2t4agZM |   14 |     10
+ 5017 | r1tkLQvn |   13 |     10
+ 5459 | r2tRgUrM |   14 |     10
+ 5460 | r2tgwQnP |   14 |     10
+ 5759 | r2tjcYCv |   14 |     10
+ 5677 | r2tqPnPg |   14 |     10
+ 5037 | r1ttAsVg |   13 |     10
+ 5606 | r2tAqs7g |   14 |     10
+ 5071 | r1t6yTer |   13 |     10
+ 5768 | r2tiLPCi |   14 |     10
+ 5610 | r2tGLbzM |   14 |     10
+ 5471 | r2tvDtE2 |   14 |     10
+ 5008 | r1tMkUHy |   13 |     10
+ 5475 | r2tLQUbG |   14 |     10
+ 5553 | r2tdWpRr |   14 |     10
+ 5655 | r2t6DgiL |   14 |     10
+ 5371 | r2tSDf4D |   14 |     10
+ 5373 | r2tBC4TB |   14 |     10
+ 5375 | r2tttnXm |   14 |     10
+ 5712 | r2t37wC6 |   14 |     10
+ 5378 | r2tqNL6K |   14 |     10
+ 5557 | r2tPZUAk |   14 |     10
+ 5657 | r2tEfnRj |   14 |     10
+ 5381 | r2tNhLbG |   14 |     10
+ 5559 | r2t2SjoD |   14 |     10
+ 5385 | r2t9GTW4 |   14 |     10
+ 5563 | r2tAYJKk |   14 |     10
+ 5389 | r2tDuLhq |   14 |     10
+ 5659 | r2tGzBqX |   14 |     10
+ 5391 | r2tEhYEf |   14 |     10
+ 5394 | r2tbp6ao |   14 |     10
+ 5395 | r2t5jTae |   14 |     10
+ 5041 | r1tGfPxE |   13 |     10
+ 5091 | r1tzNNPr |   13 |     10
+ 5570 | r2t7UgLM |   14 |     10
+ 5571 | r2tRkdJ5 |   14 |     10
+ 5714 | r2tusAVS |   14 |     10
+ 5087 | r1t8AbEP |   13 |     10
+ 5573 | r2tixyFc |   14 |     10
+ 5084 | r1t2mtaS |   13 |     10
  5411 | r2tYh542 |   14 |     10
- 5482 | r2tmMmQF |   14 |      9
- 5337 | r2tXkmeD |   14 |      9
+ 5412 | r2tLUvDQ |   14 |     10
+ 5026 | r1tM8jwj |   13 |     10
+ 5421 | r2t9r9yz |   14 |     10
+ 5422 | r2tZqHAM |   14 |     10
+ 5025 | r1trayET |   13 |     10
+ 5424 | r2tqXV4V |   14 |     10
+ 5040 | r1tN3vPz |   13 |     10
+ 5010 | r1t9oCJZ |   13 |     10
+ 5584 | r2t882fr |   14 |     10
+ 5585 | r2tb24HJ |   14 |     10
+ 5078 | r1tpFEMk |   13 |     10
  5005 | r1tVmeEa |   13 |      9
- 5288 | r2tdxvi9 |   14 |      9
+ 5482 | r2tmMmQF |   14 |      9
  5344 | r2tcjBmA |   14 |      9
+ 5337 | r2tXkmeD |   14 |      9
+ 5288 | r2tdxvi9 |   14 |      9
  5555 | r1tr4eBs |   13 |      8
  5470 | r2tB8BAr |   14 |      7
- 5028 | r1tRTMJh |   13 |      6
  5129 | r1tdN2eV |   13 |      6
+ 5028 | r1tRTMJh |   13 |      6
  5054 | r1teh6nc |   13 |      6
  5021 | r1t5Xy5v |   13 |      5
+ 5727 | r2tYNkUX |   14 |      5
  5122 | r1tGjHUt |   13 |      5
+ 5118 | r1tmxFR6 |   13 |      4
  5038 | r1tDBtsG |   13 |      4
  5015 | r1teQ2go |   13 |      4
- 5118 | r1tmxFR6 |   13 |      4
+ 5329 | r2tAzgFc |   14 |      3
+ 5442 | r2tgXSAq |   14 |      3
+ 5662 | r2tEd2Eq |   14 |      3
  5707 | r2taoJpT |   14 |      3
  5013 | r1ttF6PH |   13 |      3
- 5329 | r2tAzgFc |   14 |      3
- 5662 | r2tEd2Eq |   14 |      3
- 5442 | r2tgXSAq |   14 |      3
- 5637 | r2tcfCEW |   14 |      2
  5039 | r1treQzL |   13 |      2
+ 5637 | r2tcfCEW |   14 |      2
  5130 | r1tFt9ym |   13 |      2
- 5023 | r1tNvmvx |   13 |      1
  5402 | r1teLt2e |   13 |      1
- 5057 | r1tz5ro5 |   13 |      1
+ 5023 | r1tNvmvx |   13 |      1
  5105 | r1tLEisH |   13 |      1
+ 5057 | r1tz5ro5 |   13 |      1
 
