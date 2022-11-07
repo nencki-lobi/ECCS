@@ -70,6 +70,9 @@ story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
 
 # Plots
 
+pdir = "./plots"
+if (!dir.exists(pdir)) {dir.create(pdir)}
+
 labels = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
 
 ords = 0:179
@@ -89,5 +92,5 @@ for(i in 0:6) {
     geom_boxplot()  +
     labs(title = paste(labels[i+1], "- mean ratings per category"))
   
-  ggsave(paste(labels[i+1], "- box.png"), p2, path = "./plots")
+  ggsave(paste(labels[i+1], "- box.png"), p2, path = pdir)
 }
