@@ -48,7 +48,7 @@ ORDER BY s.sid, b.ord, b.part;
 
 SELECT 
 s.sid, s.code, s.stid,
-q.name, r.ord, r.presentation_time, r.presentation_time
+q.name, r.ord, r.presentation_time, r.evaluation_time
 FROM subject s
 JOIN qcopy q ON q.rid = s.sid
 JOIN rtitem r ON r.qid = q.qid
