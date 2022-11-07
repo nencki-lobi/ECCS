@@ -15,15 +15,19 @@ colnames(items) = c("PL","EN","NO","code")
 
 # Define helpers
 
-ord_to_code = items$code
-names(ord_to_code) = c(0:179)
-
 code_to_ord = c(0:179)
 names(code_to_ord) = items$code
 
+ord_to_code = items$code
+names(ord_to_code) = c(0:179)
+
+ord_to_category = substr(items$code, 1, 3)
+names(ord_to_category) = c(0:179)
+
 # How to use: 
-# ord_to_code["0"]
 # code_to_ord["GUI2"]
+# ord_to_code["0"]
+# ord_to_category["0"]
 
 # Change data format from long to wide
 
@@ -76,8 +80,7 @@ if (!dir.exists(pdir)) {dir.create(pdir)}
 labels = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
 
 ords = 0:179
-codes = ord_to_code[as.character(ords)]
-categories = substr(codes, 1, 3)
+categories = ord_to_category[as.character(ords)]
 
 for(i in 0:6) {
   scale = filter(story_mean_ratings, part == i)
