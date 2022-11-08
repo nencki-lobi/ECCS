@@ -78,11 +78,7 @@ story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
 participant_mean_ratings =
   mutate(ratings, category = ord_to_category[as.character(ratings$ord)]) %>%
   group_by(sid, code, category, part) %>%
-  summarise(mean = mean(opt), n = n()) %>%
-  pivot_wider(id_cols = c("sid", "code"),
-              names_from = c("part", "category"),
-              names_sep = ".",
-              values_from = c("mean", "n"))
+  summarise(mean = mean(opt), n = n())
 
 # Plots
 
