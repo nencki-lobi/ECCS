@@ -111,6 +111,27 @@ for(i in 0:6) {
   ggsave(paste(labels_scales[i+1], "- box.png"), p2, path = pdir)
 }
 
+# Plot for valence and arousal for each story 
+
+df = story_mean_ratings %>%
+  filter(part =="0" | part =="1") %>%
+  pivot_wider(id_cols = "ord",
+            names_from = part,
+            names_sep = ".",
+            values_from = "mean") %>%
+  mutate(category = ord_to_category[as.character(ord)])
+
+colnames(df) = c("ord","valence","arousal","category")
+
+p4 = ggplot(df,aes(x=valence, y=arousal)) +
+  geom_point()
+
+# Plots for valence and arousal for each emotion category
+
+p5 = ggplot(df,aes(x=valence, y=arousal, colour=factor(category))) +
+    geom_point()
+
+
 # Plots for participants
 
 df = full_join(transposed_demo,participant_mean_ratings) %>%
