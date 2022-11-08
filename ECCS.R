@@ -101,7 +101,7 @@ for(i in 0:6) {
     geom_point() +
     labs(title = paste(labels[i+1], "- mean ratings per story"))
   
-  ggsave(paste(labels[i+1], "- scatter.png"), p1, path = "./plots")
+  ggsave(paste(labels[i+1], "- scatter.png"), p1, path = pdir)
   
   p2 = ggplot(scale, aes(x=categories, y=mean)) + 
     geom_boxplot()  +
