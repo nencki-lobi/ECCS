@@ -85,23 +85,48 @@ participant_mean_ratings =
 pdir = "./plots"
 if (!dir.exists(pdir)) {dir.create(pdir)}
 
-labels = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
+labels_scales = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
+labels_categories = c("ANG", "ANX", "COM", "GUI", "HOP", "NEU")
+
+# Plots for stories
 
 ords = 0:179
 categories = ord_to_category[as.character(ords)]
 
 for(i in 0:6) {
-  scale = filter(story_mean_ratings, part == i)
+  scale_data = filter(story_mean_ratings, part == i)
   
-  p1 = ggplot(scale, aes(x=ords, y=mean)) + 
+  # Plots showing mean ratings for each story on each scale
+  p1 = ggplot(scale_data, aes(x=ords, y=mean)) + 
     geom_point() +
-    labs(title = paste(labels[i+1], "- mean ratings per story"))
+    labs(title = paste(labels_scales[i+1], "- mean ratings per story"))
   
-  ggsave(paste(labels[i+1], "- scatter.png"), p1, path = pdir)
+  ggsave(paste(labels_scales[i+1], "- scatter.png"), p1, path = pdir)
   
-  p2 = ggplot(scale, aes(x=categories, y=mean)) + 
+  # Plots showing mean ratings for each emotion category on each scale
+  p2 = ggplot(scale_data, aes(x=categories, y=mean)) + 
     geom_boxplot()  +
-    labs(title = paste(labels[i+1], "- mean ratings per category"))
+    labs(title = paste(labels_scales[i+1], "- mean ratings per category"))
   
-  ggsave(paste(labels[i+1], "- box.png"), p2, path = pdir)
+  ggsave(paste(labels_scales[i+1], "- box.png"), p2, path = pdir)
+}
+
+# Plots for participants
+
+df = full_join(transposed_demo,participant_mean_ratings) %>%
+  mutate(concern_group = recode(concern,"1"="1", "2"="1", "3"="1","4"="2","5"="3")) %>%
+  relocate(concern_group, .after = concern)
+
+for(i in 1:6) {
+  category_data = select(df, sid, concern_group, part, mean, category) %>%
+    filter(category == labels_categories[i])
+  
+  # Plots showing how CC concern impacts ratings for each stimulus category
+  p3 = ggplot(category_data, aes(x=as.character(part), y=mean, fill=as.character(concern_group))) + 
+    geom_boxplot() +
+    labs(title = paste("Impact of concern level on mean ratings for", labels_categories[i], "stories on each of the scales")) +
+    scale_x_discrete(name = "Scales", labels = labels_scales) +
+    scale_fill_manual(values = c("#1E555C", "#257e8a", "#9BC53D", "#475052"), name = "Concern level", labels = c("Low","Medium","High","In denial"))
+  
+  ggsave(paste(labels_categories[i], "- box.png"), p3, path = pdir)
 }
