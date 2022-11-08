@@ -45,6 +45,7 @@ transposed_demo = demo %>%
               values_from = "val")
 
 transposed_demo = filter(transposed_demo, sid %in% transposed_ratings$sid)
+colnames(transposed_demo) = c("sid","code","stid","sex","year","res","edu","child","work","org","belief","concern","sex_other","edu_other")
 
 # For each story calculate mean ratings on each of the scales
 
@@ -57,18 +58,18 @@ story_mean_ratings = ratings %>%
 subjects.ords = select(ratings, sid, code, stid, ord) %>% distinct()
 
 story_sex_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
-  group_by(ord, `demo-1-pl.0`) %>%
+  group_by(ord, sex) %>%
   summarise(n = n()) %>%
   pivot_wider(id_cols = "ord",
-              names_from = `demo-1-pl.0`,
+              names_from = sex,
               names_sep = ".",
               values_from = "n")
 
 story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
-  group_by(ord, `demo-1-pl.10`) %>%
+  group_by(ord, concern) %>%
   summarise(n = n()) %>%
   pivot_wider(id_cols = "ord",
-              names_from = `demo-1-pl.10`,
+              names_from = concern,
               names_sep = ".",
               values_from = "n")
 
