@@ -78,6 +78,24 @@ story_mean_ratings = ratings %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n())
 
+# For each story calculate mean ratings for men
+
+men_demo = filter(transposed_demo, transposed_demo$sex == "1")
+men_ratings = filter(ratings, ratings$sid %in% men_demo$sid)
+
+men_mean_ratings = men_ratings %>%
+  group_by(ord, part) %>%
+  summarise(mean = mean(opt), n = n())
+
+# For each story calculate mean ratings for women
+
+women_demo = filter(transposed_demo, transposed_demo$sex == "0")
+women_ratings = filter(ratings, ratings$sid %in% women_demo$sid)
+
+women_mean_ratings = women_ratings %>%
+  group_by(ord, part) %>%
+  summarise(mean = mean(opt), n = n())
+
 # For each story obtain demographic profile
 
 subjects.ords = select(ratings, sid, code, stid, ord) %>% distinct()
