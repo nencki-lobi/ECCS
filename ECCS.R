@@ -64,6 +64,14 @@ transposed_demo = demo %>%
 transposed_demo = filter(transposed_demo, sid %in% transposed_ratings$sid)
 colnames(transposed_demo) = c("sid","code","stid","sex","year","res","edu","child","work","org","belief","concern","sex_other","edu_other")
 
+# Adding age column
+
+current_year = 2022
+
+transposed_demo = mutate(transposed_demo, age = current_year - as.numeric(year)) %>%
+  relocate(age, .after = year) %>%
+  filter(age>17)
+
 # For each story calculate mean ratings on each of the scales
 
 story_mean_ratings = ratings %>%
