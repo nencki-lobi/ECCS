@@ -128,13 +128,17 @@ participant_mean_ratings =
 pdir = "./plots"
 if (!dir.exists(pdir)) {dir.create(pdir)}
 
-labels_scales = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
-labels_categories = c("ANG", "ANX", "COM", "GUI", "HOP", "NEU")
-
-# Plots for stories
+psubdir = file.path(pdir, paste0("items-required-",as.character(items_required)))
+if (!dir.exists(psubdir)) {dir.create(psubdir)}
 
 ords = 0:179
 categories = ord_to_category[as.character(ords)]
+labels_scales = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
+labels_categories = c("ANG", "ANX", "COM", "GUI", "HOP", "NEU")
+
+beauty = theme_linedraw() + theme(panel.grid = element_blank(), aspect.ratio = 1)
+
+# Plots for stories
 
 for(i in 0:6) {
   scale_data = filter(story_mean_ratings, part == i)
@@ -142,38 +146,77 @@ for(i in 0:6) {
   # Plots showing mean ratings for each story on each scale
   p1 = ggplot(scale_data, aes(x=ords, y=mean)) + 
     geom_point() +
-    labs(title = paste(labels_scales[i+1], "- mean ratings per story"))
+    xlim(c(-1,180)) + ylim(c(-1,100)) +
+    labs(title = paste(labels_scales[i+1], "- mean ratings per story on each of the scales")) + beauty
   
-  ggsave(paste(labels_scales[i+1], "- scatter.png"), p1, path = pdir)
+  ggsave(paste(labels_scales[i+1], "- scatter.png"), p1, path = psubdir)
   
   # Plots showing mean ratings for each emotion category on each scale
   p2 = ggplot(scale_data, aes(x=categories, y=mean)) + 
     geom_boxplot()  +
-    labs(title = paste(labels_scales[i+1], "- mean ratings per category"))
+    ylim(c(-1,100)) +
+    labs(title = paste(labels_scales[i+1], "- mean ratings per category")) + beauty
   
-  ggsave(paste(labels_scales[i+1], "- box.png"), p2, path = pdir)
+  ggsave(paste(labels_scales[i+1], "- box.png"), p2, path = psubdir)
 }
 
 # Plot for valence and arousal for each story 
-
 df = story_mean_ratings %>%
   filter(part =="0" | part =="1") %>%
   pivot_wider(id_cols = "ord",
-            names_from = part,
-            names_sep = ".",
-            values_from = "mean") %>%
+              names_from = part,
+              names_sep = ".",
+              values_from = "mean") %>%
   mutate(category = ord_to_category[as.character(ord)])
 
 colnames(df) = c("ord","valence","arousal","category")
 
-p4 = ggplot(df,aes(x=valence, y=arousal)) +
-  geom_point()
+p3 = ggplot(df,aes(x=valence, y=arousal)) +
+  geom_point()+
+  xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
+
+ggsave("valece_x_arousal.png", p3, path = psubdir)
+
+# Plots for valence and arousal for each emotion category on one plot
+p4 = ggplot(df,aes(x=valence,y=arousal, colour=factor(category)))+
+  geom_point() + 
+  xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
+
+ggsave(paste(labels_categories[i],"vs all - scatter.png"),p4, path = psubdir)
 
 # Plots for valence and arousal for each emotion category
+df %>% mutate(is_category = case_when(
+  grepl(labels_categories[i],category) ~ "Group1",
+  TRUE ~ "Group2"))
 
-p5 = ggplot(df,aes(x=valence, y=arousal, colour=factor(category))) +
-    geom_point()
+for (i in 1:6) {
+  tmp = df %>% mutate(is_category = case_when(
+    grepl(labels_categories[i], category) ~ "Group1",
+    TRUE ~"Group2"))
+  colnames(tmp) = c("ord","valence","arousal","category","group")
+  p5 = ggplot(tmp,aes(x=valence, y=arousal, colour=factor(group))) +
+    geom_point() +
+    xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
+  
+  ggsave(paste(labels_categories[i],"vs all - scatter.png"),p5, path = psubdir)
+}
 
+# Plots of mean ratings on each scale for men and women
+df = full_join(men_mean_ratings, women_mean_ratings, by = c("ord","part"), suffix = c(".m", ".w")) %>%
+  select("ord","part","mean.m","mean.w") %>%
+  mutate(code = ord_to_code[as.character(ord)])
+
+for (i in 1:7) {
+  tmp = filter(df, part == i)
+  p6 = ggplot(tmp, aes(x = mean.m, y = mean.w)) +
+    geom_point() +
+    geom_abline(aes(intercept = 0, slope = 1)) +
+    geom_label(data = subset(tmp, abs(mean.w - mean.m) > 25),
+               aes(x = mean.w, y = mean.m, label = code)) +
+    xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
+  
+  ggsave(paste(labels_scales[i],"- men_vs_women.png"),p6, path = psubdir)
+}
 
 # Plots for participants
 
@@ -186,11 +229,11 @@ for(i in 1:6) {
     filter(category == labels_categories[i])
   
   # Plots showing how CC concern impacts ratings for each stimulus category
-  p3 = ggplot(category_data, aes(x=as.character(part), y=mean, fill=as.character(concern_group))) + 
+  p7 = ggplot(category_data, aes(x=as.character(part), y=mean, fill=as.character(concern_group))) + 
     geom_boxplot() +
     labs(title = paste("Impact of concern level on mean ratings for", labels_categories[i], "stories on each of the scales")) +
     scale_x_discrete(name = "Scales", labels = labels_scales) +
-    scale_fill_manual(values = c("#1E555C", "#257e8a", "#9BC53D", "#475052"), name = "Concern level", labels = c("Low","Medium","High","In denial"))
+    scale_fill_manual(values = c("#1E555C", "#257e8a", "#9BC53D", "#475052"), name = "Concern level", labels = c("Low","Medium","High","In denial")) + beauty
   
-  ggsave(paste(labels_categories[i], "- box.png"), p3, path = pdir)
+  ggsave(paste(labels_categories[i], "- box.png"), p7, path = psubdir)
 }
