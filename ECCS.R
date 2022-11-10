@@ -13,6 +13,9 @@ colnames(demo) = c("sid","code","stid","name","ord", "val")
 items = read.table("./data/rtask-items.tsv", header = F, sep = "\t", encoding = "UTF-8")
 colnames(items) = c("PL","EN","NO","code")
 
+stories_rated_ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
+colnames(stories_rated_ranking) = c("sid","code","stid","rank")
+
 # Define helpers
 
 code_to_ord = c(0:179)
