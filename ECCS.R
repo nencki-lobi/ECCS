@@ -16,6 +16,20 @@ colnames(items) = c("PL","EN","NO","code")
 stories_rated_ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
 colnames(stories_rated_ranking) = c("sid","code","stid","rank")
 
+## Removing underage respondents
+
+subjects = filter(demo, ord == 2 & as.numeric(val) < 2005)$sid
+ratings = filter(ratings, sid %in% subjects)
+demo = filter(demo, sid %in% subjects)
+
+## Removing ratings from participants who rated less than k stories
+
+items_required = 10
+
+subjects = filter(stories_rated_ranking, rank >= items_required)$sid
+ratings = filter(ratings, sid %in% subjects)
+demo = filter(demo, sid %in% subjects)
+
 # Define helpers
 
 code_to_ord = c(0:179)
