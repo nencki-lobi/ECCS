@@ -1,6 +1,7 @@
 library('dplyr')
 library('tidyr')
 library('ggplot2')
+library('stringr')
 
 # Load data
 
@@ -13,29 +14,32 @@ colnames(demo) = c("sid","code","stid","name","ord", "val")
 items = read.table("./data/rtask-items.tsv", header = F, sep = "\t", encoding = "UTF-8")
 colnames(items) = c("PL","EN","NO","code")
 
-stories_rated_ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
-colnames(stories_rated_ranking) = c("sid","code","stid","rank")
+ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
+colnames(ranking) = c("sid","code","stid","rank")
 
-## Removing underage respondents
+# Data cleaning
+
+## Remove underage participants
 
 subjects = filter(demo, ord == 2 & as.numeric(val) < 2005)$sid
 ratings = filter(ratings, sid %in% subjects)
 demo = filter(demo, sid %in% subjects)
 
-## Removing ratings from participants who rated less than k stories
+## Remove participants who rated insufficient number of stories (items)
 
-items_required = 0
+required = 0
 
-subjects = filter(stories_rated_ranking, rank >= items_required)$sid
+subjects = filter(ranking, rank >= required)$sid
 ratings = filter(ratings, sid %in% subjects)
 demo = filter(demo, sid %in% subjects)
 
 # Define helpers
 
 ords = 0:179
+parts = 0:6
 labels_scales = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
 labels_categories = c("ANG", "ANX", "COM", "GUI", "HOP", "NEU")
-colors_categories = c("#E05263", "#659157", "#FFCAB1", "#303633", "#69A2B0", "#96949B")
+colors_categories = c("#E05263", "#659157", "#FEAEA5", "#6C5670", "#69A2B0", "#96949B")
 
 code_to_ord = ords
 names(code_to_ord) = items$code
@@ -47,7 +51,7 @@ ord_to_category = substr(items$code, 1, 3)
 names(ord_to_category) = ords
 
 part_to_scale = labels_scales
-names(part_to_scale) = c(0:6)
+names(part_to_scale) = parts
 
 categories = ord_to_category[as.character(ords)]
 
@@ -74,7 +78,7 @@ transposed_demo = demo %>%
 transposed_demo = filter(transposed_demo, sid %in% transposed_ratings$sid)
 colnames(transposed_demo) = c("sid","code","stid","sex","year","res","edu","child","work","org","belief","concern","sex_other","edu_other")
 
-# Adding age column
+# Create extra variables for later use
 
 current_year = 2022
 
@@ -84,25 +88,27 @@ transposed_demo = mutate(transposed_demo, age = current_year - as.numeric(year))
 
 # For each story calculate mean ratings on each of the scales
 
+## Whole sample
+
 story_mean_ratings = ratings %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n())
 
-# For each story calculate mean ratings for men
+## Male sample
 
-men_demo = filter(transposed_demo, transposed_demo$sex == "1")
-men_ratings = filter(ratings, ratings$sid %in% men_demo$sid)
+demo_M = filter(transposed_demo, transposed_demo$sex == "1")
+ratings_M = filter(ratings, ratings$sid %in% demo_M$sid)
 
-men_mean_ratings = men_ratings %>%
+story_mean_ratings_M = ratings_M %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n())
 
-# For each story calculate mean ratings for women
+## Female sample
 
-women_demo = filter(transposed_demo, transposed_demo$sex == "0")
-women_ratings = filter(ratings, ratings$sid %in% women_demo$sid)
+demo_F = filter(transposed_demo, transposed_demo$sex == "0")
+ratings_F = filter(ratings, ratings$sid %in% demo_F$sid)
 
-women_mean_ratings = women_ratings %>%
+story_mean_ratings_F = ratings_F %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n())
 
@@ -135,69 +141,154 @@ participant_mean_ratings =
 
 # Plots
 
-pdir = "./plots"
+pdir = "./output"
 if (!dir.exists(pdir)) {dir.create(pdir)}
 
-psubdir = file.path(pdir, paste0("items-required-",as.character(items_required)))
+psubdir = file.path(pdir, paste0("required-",as.character(required)))
 if (!dir.exists(psubdir)) {dir.create(psubdir)}
 
 beauty = theme_linedraw() + theme(panel.grid = element_blank(), aspect.ratio = 1)
 
-# Plots for stories
+## Plot demographic data
 
-# Plots showing mean ratings for each story on each scale
+df = transposed_demo %>%
+  select(sex,age,res,edu,child,work,org,belief,concern) %>%
+  mutate(across(where(is.character), as.factor))
+
+sink(file = file.path(pdir, paste0("required-",as.character(required)), "Demographics - summary statistics.txt"))
+summary(df)
+sink(file = NULL)
+
+plot.fig1 = function(data, variable, name, lnames) {
+  ggplot(data, aes(variable)) +
+    geom_bar() +
+    xlab(name) + ylab("Number of participants") + 
+    scale_x_discrete(labels = lnames) +
+    beauty + theme(axis.text = element_text(size = 6))
+}
+
+### Gender
+name = "Gender"
+lnames = c("Female", "Male", "Other")
+p = plot.fig1(df, df$sex, name, lnames)
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Age
+name = "Age"
+lnames = NULL
+p = plot.fig1(df, df$age, name, lnames)
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Place of residence
+name = "Place of residence"
+lnames = c("Rural", "Urban <50k", "Urban 50-100k", "Urban 100-500k", "Urban >500k")
+p = plot.fig1(df, df$res, name, lnames) +
+  scale_x_discrete(labels = str_wrap(lnames, width = 10))
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Education
+name = "Education"
+lnames = c("Primary", "Vocational", "Secondary", "Undergraduate", "Graduate", "Doctoral")
+p = plot.fig1(df, df$edu, name, lnames)
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Parenthood status
+name = "Parenthood status"
+lnames = c("Yes", "No")
+p = plot.fig1(df, df$child, name, lnames)
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Occupation related to climate change
+name = "Occupation related to climate change"
+lnames = c("Yes", "No")
+p = plot.fig1(df, df$work, name, lnames)
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Activism related to climate change
+name = "Activism related to climate change"
+lnames = c("Yes", "No")
+p = plot.fig1(df, df$org, name, lnames)
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Belief in climate change
+name = "Belief in climate change"
+lnames = c("Strongly believes",
+           "Rather believes",
+           "Rather does not believe",
+           "Strongly does not believe")
+p = plot.fig1(df, df$belief, name, lnames) +
+  scale_x_discrete(labels = str_wrap(lnames, width = 10))
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+### Concern about climate change
+name = "Concern about climate change"
+lnames = c("Not concerned",
+           "Barely concerned",
+           "Somewhat concerned",
+           "Very concerned",
+           "Extremely concerned",
+           "Denies climate change")
+p = plot.fig1(df, df$concern, name, lnames) +
+  scale_x_discrete(labels = str_wrap(lnames, width = 10))
+ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
+
+## Plot mean ratings for each story with stories ordered by number (ord)
 
 df = story_mean_ratings %>%
   mutate(category = ord_to_category[as.character(ord)])
   
-plot.fig1 <- function(data) {
+plot.fig2 = function(data) {
   ggplot(data, aes(x=ord, y=mean, colour=factor(category))) + 
     geom_point() +
     xlim(c(-1,180)) + ylim(c(-1,100)) +
-    xlab("Stories") +
-    scale_color_manual(values = colors_categories, name = "Story category") + beauty
+    xlab("Story number") + ylab("Mean ratings") +
+    scale_color_manual(values = colors_categories, name = "Story type") + beauty
 }
 
-# Separate plots
-  
-for(i in 0:5) {
+### Separate plots
+for(i in 0:6) {
   subdf = filter(df, part == i)
-  p = plot.fig1(subdf) + labs(title = paste("Mean story ratings on", labels_scales[i+1], "scale"))  + ylab(paste(labels_scales[i+1],"mean ratings"))
-  ggsave(paste("Fig 1 -", part_to_scale[i+1], "- scatter.png"), p, path = psubdir)
+  p = plot.fig2(subdf) +
+    labs(title = paste("Mean ratings on", tolower(labels_scales[i+1]), "scale"))
+  ggsave(paste("Fig 2 -", part_to_scale[i+1], "- ratings by story number.png"), p, path = psubdir)
 }
 
-# Wrapped plots
-Fig1 = plot.fig1(df) + facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + theme(aspect.ratio = 1.1) + 
-  labs(title ="Mean story ratings on each of the scales") + ylab("Mean ratings")
-ggsave("Fig 1 - Wrap Scatter.png", Fig1, width = 15, height = 10, path = psubdir)
+### Wrapped plots
+p = plot.fig2(df) +
+  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) +
+  labs(title = "Mean ratings on each of the scales")
+ggsave("Fig 2 - Wrap - ratings by story number.png", p, width = 15, height = 10, path = psubdir)
 
-# Plots showing mean ratings for each emotion category on each scale
+## Plot mean ratings for each story type
 
-plot.fig2 <-function(data) {
-  ggplot(data, aes(x=ord, y=mean,colour=factor(category))) + 
-    geom_boxplot()  +
+df = story_mean_ratings %>%
+  mutate(category = ord_to_category[as.character(ord)])
+
+plot.fig3 = function(data) {
+  ggplot(data, aes(x=category, y=mean, fill=factor(category))) + 
+    geom_boxplot() +
     ylim(c(-1,100)) +
-    xlab("")+
-    ylab(paste(labels_scales[i+1],"mean ratings")) +
-    scale_x_discrete() +
-    scale_color_manual(values = colors_categories, name = "Story category") +
-    labs(title = "Mean scale ratings in each story category") + beauty
+    xlab("Story type") + ylab("Mean ratings") +
+    scale_fill_manual(name = "Story type", values = colors_categories) + beauty
 }
 
-# Separate plots
-
-for(i in 0:5) {
+### Separate plots
+for(i in 0:6) {
   subdf = filter(df, part == i)
-  p = plot.fig2(subdf) + labs(title = paste( "Mean scale ratings in", labels_scales[i+1] ,"category"))
-  ggsave(paste("Fig 2 -", part_to_scale[i+1], "- box.png"), p, path = psubdir)
+  p = plot.fig3(subdf) +
+    labs(title = paste("Mean ratings on", tolower(labels_scales[i+1]),"scale")) +
+    theme(legend.position = "none")
+  ggsave(paste("Fig 3 -", part_to_scale[i+1], "- ratings by story type.png"), p, path = psubdir)
 }
 
-# Wrapped plot
-  Fig2 = plot.fig2(df) + facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + ylab("Mean ratings")
-  ggsave("Fig 2 - Wrap Box.png", Fig2, width = 15, height = 10, path = psubdir)
+### Wrapped plot
+p = plot.fig3(df) + 
+  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
+  labs(title ="Mean ratings on each of the scales") +
+  scale_x_discrete(labels = NULL)
+ggsave("Fig 3 - Wrap - ratings by story type.png", p, width = 15, height = 10, path = psubdir)
   
-
-# Plot for valence and arousal for each story on one plot
+## Plot mean valence and arousal ratings for each story
 
 df = story_mean_ratings %>%
   filter(part =="0" | part =="1") %>%
@@ -209,178 +300,94 @@ df = story_mean_ratings %>%
 
 colnames(df) = c("ord","valence","arousal","category")
 
-Fig3 = ggplot(df,aes(x=valence,y=arousal, colour=factor(category)))+
-  geom_point() + 
-  labs(title = "Mean valence and arousal for each story") +
-  scale_color_manual(values = colors_categories, name = "Story category") +
-  xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
-
-ggsave("Fig 3 - Valence_x_Arousal.png",Fig3 , path = psubdir)
-
-
-#Separate plots
-df %>% mutate(is_category = case_when(
-  !grepl(labels_categories[i],category) ~ "Group1",
-  TRUE ~ "Group2"))
-
-plot.fig3 = function(data){
-  ggplot(data,aes(x=valence, y=arousal, colour=factor(group))) +
+plot.fig4 = function(data){
+  ggplot(data, aes(x=valence, y=arousal, colour=factor(group))) +
     geom_point() +
-    labs(title = paste("Mean valence and arousal of the stories from", labels_categories[i], "category"), colour = "Emotion category") +
-    scale_color_manual(values = c(colors_categories[i], "#D2CFDC")) +
-    xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
+    xlim(c(-1,100)) + ylim(c(-1,100)) +
+    xlab("Valence") + ylab("Arousal") +
+    scale_color_manual(values = c(colors_categories[i], "#D2CFDC"), name = "Story type") + beauty
 }
 
+### Separate plots
 for(i in 1:6) {
   subdf = df %>% mutate(is_category = case_when(
     grepl(labels_categories[i], category) ~ labels_categories[i],
-    TRUE ~"Other"))
+    TRUE ~ "Other"))
   colnames(subdf) = c("ord","valence","arousal","category","group")
-  p = plot.fig3(subdf)
-  ggsave(paste("Fig 3 -", labels_categories[i], "- vs all other.png"), p, path = psubdir)
+  p = plot.fig4(subdf) +
+    labs(title = paste("Mean valence and arousal for", labels_categories[i], "stories"))
+  ggsave(paste("Fig 4 -", labels_categories[i], "- valence & arousal ratings.png"), p, path = psubdir)
 }
+
+### Single plot
+p = ggplot(df, aes(x=valence, y=arousal, colour=factor(category)))+
+  geom_point() +
+  xlim(c(-1,100)) + ylim(c(-1,100)) +
+  xlab("Valence") + ylab("Arousal") +
+  scale_color_manual(values = colors_categories, name = "Story type") +
+  labs(title = "Mean valence and arousal for each story type") + beauty
+ggsave("Fig 4 - All - valence & arousal ratings.png", p, path = psubdir)
   
-# Plots showing how CC concern impacts ratings for each stimulus category
+## Plot how climate change concern impacts mean ratings
 
 df = full_join(transposed_demo,participant_mean_ratings) %>%
-  mutate(concern_group = recode(concern,"1"="1", "2"="1", "3"="1","4"="2","5"="3")) %>%
+  mutate(concern_group = recode(concern, "1"="1", "2"="1", "3"="1", "4"="2", "5"="3")) %>%
+  mutate(across(c("part", "concern_group"), as.character)) %>%
   relocate(concern_group, .after = concern)
 
-plot.fig4 = function(data) {
-  ggplot(data, aes(x=as.character(part), y=mean, fill=as.character(concern_group))) + 
+plot.fig5 = function(data) {
+  ggplot(data, aes(x=part, y=mean, fill=concern_group)) + 
     geom_boxplot() +
-    scale_x_discrete(name = "Scales", labels = labels_scales) +
-    scale_fill_manual(values = c("#E8EC67", "#659157", "#0A3200", "#475052"), name = "Concern level", labels = c("Low","Medium","High","In denial")) + beauty
+    ylim(c(-1,100)) +
+    xlab("Scales") + ylab("Mean ratings") +
+    scale_x_discrete(labels = labels_scales) +
+    scale_fill_manual(name = "Climate change concern",
+                      labels = c("Low","Medium","High","In denial"),
+                      values = c("#E8EC67", "#659157", "#0A3200", "#475052")) + beauty
 }
 
-# Wrapped plots 
-
-Fig4 = plot.fig4(df) + facet_wrap(~category, ncol = 3, labeller = as_labeller(part_to_scale)) +
-  labs(title = "Impact of concern level on mean ratings on all scales for all stories")
-ggsave("Fig 4 - Wrap CC_concern.png",Fig4 , width = 15, height = 12, path = psubdir)
-
-#Separate plots
-
+### Separate plots
 for (i in 1:6) {
   subdf = filter(df, category == labels_categories[i])
-  p = plot.fig4(subdf) +
-    labs(title = paste("Impact of concern level on mean ratings for stories from", labels_categories[i],"category"))
-  ggsave(paste("Fig 4 -",labels_categories[i], "- cc_concern.png"), p, path = psubdir)
+  p = plot.fig5(subdf) +
+    labs(title = paste("Impact of climate change concern on ratings for", labels_categories[i], "stories"))
+  ggsave(paste("Fig 5 -",labels_categories[i], "- ratings by CC concern.png"), p, path = psubdir)
 }
 
-# Plots of mean ratings on each scale for men and women
+### Wrapped plots 
+p = plot.fig5(df) +
+  facet_wrap(~category, ncol = 3) +
+  labs(title = "Impact of climate change concern on ratings for each story type")
+ggsave("Fig 5 - Wrap - ratings by CC concern.png",p , width = 15, height = 10, path = psubdir)
 
-df = full_join(men_mean_ratings, women_mean_ratings, by = c("ord","part"), suffix = c(".m", ".w")) %>%
+## Plot comparison of mean ratings in male and female samples
+
+df = full_join(story_mean_ratings_M, story_mean_ratings_F, by = c("ord","part"), suffix = c(".m", ".w")) %>%
   select("ord","part","mean.m","mean.w") %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
   mutate(category = ord_to_category[as.character(ord)])
 
-plot.fig5 = function(data) {
+plot.fig6 = function(data) {
   ggplot(data, aes(x = mean.m, y = mean.w, label = code, colour=factor(category))) +
-    scale_color_manual(values = colors_categories, name = "Story category") +
     geom_point() +
+    xlim(c(-1,100)) + ylim(c(-1,100)) +
+    xlab("Mean ratings in male sample") + ylab("Mean ratings in female sample") +
+    scale_color_manual(values = colors_categories, name = "Story type") +
     geom_abline(aes(intercept = 0, slope = 1)) +
     geom_label(data = subset(data, abs(mean.w - mean.m) > 25), show.legend = FALSE) +
-    xlab("Men mean ratings") + ylab("Women mean ratings") +
-    xlim(c(-1,100)) + ylim(c(-1,100)) + beauty
+    beauty
 }
 
-# Wrapped plots
-Fig5 = plot.fig5(df) + facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
-  theme(aspect.ratio = 1.2) + labs(title = "Gender differences in mean ratings of stories on each scale")
-ggsave("Fig 5 - Wrap Gender.png", Fig5, width = 15, height = 10, path = psubdir)
-
-#Separate plots
+### Separate plots
 for (i in 0:6) {
   subdf = filter(df, part == i)
-  p = plot.fig5(subdf) + labs(title = paste("Gender differences in mean ratings of stories on", labels_scales[i+1] ,"scale"))
-  ggsave(paste("Fig 5 -", part_to_scale[i+1], "- gender.png"), p, path = psubdir)
+  p = plot.fig6(subdf) +
+    labs(title = paste("Gender differences in mean ratings of stories on", tolower(labels_scales[i+1]) , "scale"))
+  ggsave(paste("Fig 6 -", part_to_scale[i+1], "- ratings by gender.png"), p, path = psubdir)
 }
 
-#Descriptives
-  
-pdir = "./descriptives"
-if (!dir.exists(pdir)) {dir.create(pdir)}
-
-descriptives = transposed_demo %>%
-  select(sex,age,res,edu,child,work,org,belief,concern) %>%
-  mutate(across(where(is.character), as.factor))
-  
-sink(file = "./descriptives/summary_descriptives.txt")
-summary(descriptives)
-sink(file = NULL)
-
-fig_gender = ggplot(descriptives, aes(x = sex, fill=sex)) +
-  geom_bar() +
-  labs(title = "Gender distribution") +
-  scale_x_discrete(name = "", labels = c("Women", "Men", "Other")) + ylab("Count") +
-  scale_fill_manual(values = c("#659157","#E05263", "#69A2B0"),
-                    name = "Gender",
-                    labels = c("Women", "Men", "Other")) + beauty
-ggsave("Fig 6 gender.png",fig_gender , path = "./descriptives")
-
-fig_age = ggplot(descriptives, aes(age)) +geom_bar() +
-  labs(title = "Age distribution", xlab("Age")) +
-  xlab("Age") + ylab("Count") + beauty
-ggsave("Fig 6 age.png",fig_age, path = "./descriptives")
-
-fig_res = ggplot(descriptives, aes(res, fill=res)) + geom_bar() +
-  labs(title = "Place of residence") +
-  scale_x_discrete(name = "", labels = c("Rural", "", "", "","Urban")) + ylab("Count") +
-  scale_fill_manual(values = c("#E05263", "#659157", "#FFCAB1", "#303633", "#69A2B0"),
-                    name = "Place",
-                    labels = c("Rural", "Urban <50k", "Urban 50k-100k", "Urban 100k-500k","Urban >500k")) + beauty
-ggsave("Fig 6 res.png",fig_res , path = "./descriptives")
-
-fig_edu = ggplot(descriptives, aes(edu, fill=edu)) +geom_bar() + 
-  labs(title = "Education level") +
-  scale_x_discrete(name = "", labels = c("Primary", "", "","", "", "","Doctoral")) + ylab("Count") +
-  scale_fill_manual(values = c("#E05263", "#659157", "#FFCAB1", "#303633", "#69A2B0", "#96949B"),
-                    name = "Education",
-                    labels = c("Primary", "Vocational","Secondary",
-                               "Undergraduate", "Graduate","Doctoral")) + beauty
-ggsave("Fig 6 edu.png",fig_edu ,width = 20, height = 10, path = "./descriptives")
-
-
-fig_child = ggplot(descriptives, aes(child, fill=child)) +geom_bar() +
-  labs(title = "Parenthood status") +
-  scale_x_discrete(name = "", labels = c("Yes", "No")) + ylab("Count") +
-  scale_fill_manual(values = c("#659157","#E05263"),
-                    name = "Respondend has child(ren)",
-                    labels = c("Yes", "No")) + beauty
-ggsave("Fig 6 child.png",fig_child , path = "./descriptives")
-
-fig_work = ggplot(descriptives, aes(work, fill=work)) +geom_bar() +
-  labs(title = "Occupational status") +
-  scale_x_discrete(name = "", labels = c("Yes", "No")) + ylab("Count") +
-  scale_fill_manual(values = c("#659157","#E05263"),
-                    name = "Work related to climate",
-                    labels = c("Yes", "No")) + beauty
-ggsave("Fig 6 work.png",fig_work , path = "./descriptives")
-
-fig_org = ggplot(descriptives, aes(org, fill=org)) +geom_bar() +
-  labs(title = "Activism and volunteering") +
-  scale_x_discrete(name = "", labels = c("Yes", "No")) + ylab("Count") +
-  scale_fill_manual(values = c("#659157","#E05263"),
-                    name = "Involvement in climate action",
-                    labels = c("Yes", "No")) + beauty
-ggsave("Fig 6 org.png",fig_org , path = "./descriptives")
-
-fig_belief = ggplot(descriptives, aes(belief, fill=belief)) + geom_bar() +
-  labs(title = "Belief in climate change") +
-  scale_x_discrete(name = "", labels = c("Believes", "", "", "Disbelieves")) + ylab("Count") +
-  scale_fill_manual(values = c("#E05263", "#659157", "#FFCAB1", "#303633", "#69A2B0"),
-                    name = "Respondent",
-                    labels = c("Believes in climate change", "Rather believes", 
-                               "Rather disbelieves", "Disbelieves in climate change")) + beauty
-ggsave("Fig 6 belief.png",fig_belief , path = "./descriptives")
-
-fig_concern = ggplot(descriptives, aes(concern, fill=concern)) + geom_bar() +
-  labs(title = "Concern about climate change") +
-  scale_x_discrete(name = "", labels = c("Not concerned", "", "", "", "Not concerned", "")) + ylab("Count") +
-  scale_fill_manual(values = c("#E05263", "#659157", "#FFCAB1", "#303633", "#69A2B0"),
-                    name = "Respondent is:",
-                    labels = c("Not concerned", "Barely concerned", "Somewhat concerned", "Very concerned",
-                               "Extremely concerned","Doesn't believe in climate change")) + beauty
-ggsave("Fig 6 concern.png",fig_concern , path = "./descriptives")
-
+### Wrapped plots
+p = plot.fig6(df) +
+  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
+  labs(title = "Gender differences in mean ratings of stories on each scale")
+ggsave("Fig 6 - Wrap - ratings by gender.png", p, width = 15, height = 10, path = psubdir)

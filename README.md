@@ -12,4 +12,4 @@ psql -U grieg -d grieg --file rtask.sql
 
 ## Requirements
 
-The following R packages are required: `dplyr`, `ggplot2`, `tidyr`.
+The following R packages are required: `dplyr`, `ggplot2`, `stringr`, `tidyr`.
