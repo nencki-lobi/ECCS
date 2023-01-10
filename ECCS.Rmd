@@ -1,0 +1,15 @@
+---
+title: "Emotional Climate Change Stories (ECCS)"
+output: html_document
+params:
+  required: 0
+---
+
+```{r include=FALSE, echo=FALSE}
+library('tidyverse')
+
+source('./code/01-preproc.R')
+source('./code/02-helpers.R')
+source('./code/03-derivatives.R')
+source('./code/04-plots.R')
+```
