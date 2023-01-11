@@ -155,6 +155,18 @@ colnames(distances) = c(labels_categories, "MID")
 distances_from_classes = distances[,labels_categories]
 distance_from_the_middle = distances[,"MID"]
 
+## Best and worst stories
+
+df = bind_cols(items, distances)
+
+best_stories = df %>% 
+  arrange(desc(MID)) %>%
+  slice_head(n = 30)
+
+worst_stories = df %>% 
+  arrange(MID) %>%
+  slice_head(n = 30)
+
 ## Inspect how different set of thresholds impact class sizes
 
 df <- data.frame(matrix(ncol = 3, nrow = 0))
@@ -238,9 +250,3 @@ thr = out$solution
 for(i in ords) {
    classes[i+1] = get.classes(distances_from_classes[i+1,], thr, labels_categories)
 }
-
-## Worst stories
-
-worst_stories = sort(distance_from_the_middle, index.return = TRUE)
-items$code[head(worst_stories$ix, 30)]
-items$code[tail(worst_stories$ix, 30)]
