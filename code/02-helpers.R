@@ -24,3 +24,5 @@ categories = ord_to_category[as.character(ords)]
 # code_to_ord["GUI2"]
 # ord_to_code["0"]
 # ord_to_category["0"]
+
+beauty = theme_linedraw() + theme(panel.grid = element_blank(), aspect.ratio = 1)

@@ -6,8 +6,6 @@ if (!dir.exists(pdir)) {dir.create(pdir)}
 psubdir = file.path(pdir, paste0("required-",as.character(required)))
 if (!dir.exists(psubdir)) {dir.create(psubdir)}
 
-beauty = theme_linedraw() + theme(panel.grid = element_blank(), aspect.ratio = 1)
-
 ## Plot demographic data
 
 ### Generate summary statistics and percentages
