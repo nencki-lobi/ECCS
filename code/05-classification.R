@@ -250,3 +250,18 @@ thr = out$solution
 for(i in ords) {
    classes[i+1] = get.classes(distances_from_classes[i+1,], thr, labels_categories)
 }
+
+classes = data.frame(class = classes)
+
+## Preview the classification results
+
+means = transposed_story_mean_ratings %>%
+  ungroup() %>%
+  select(matches("mean"))
+
+df = bind_cols(items, classes, means, distances)
+
+colnames(df) = c(colnames(items),
+                 "class",
+                 paste("M", labels_scales, sep = "."),
+                 paste("D", c(labels_categories, "MID"), sep = "."))

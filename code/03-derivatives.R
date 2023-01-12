@@ -32,6 +32,13 @@ story_mean_ratings = ratings %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n())
 
+transposed_story_mean_ratings = story_mean_ratings %>%
+  pivot_wider(id_cols = "ord",
+              names_from = "part",
+              names_sep = ".",
+              names_sort = T,
+              values_from = c("mean", "n"))
+
 ## Male sample
 
 demo_M = filter(transposed_demo, transposed_demo$sex == "1")
