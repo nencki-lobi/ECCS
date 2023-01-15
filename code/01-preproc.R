@@ -12,6 +12,14 @@ colnames(items) = c("PL","EN","NO","code")
 ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
 colnames(ranking) = c("sid","code","stid","rank")
 
+# Studies to be included
+
+studies = eval(parse(text = params$studies))
+
+ratings = filter(ratings, stid %in% studies)
+demo = filter(demo, stid %in% studies)
+ranking = filter(ranking, stid %in% studies)
+
 # Data cleaning
 
 ## Remove underage participants

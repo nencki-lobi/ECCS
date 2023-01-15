@@ -3,7 +3,9 @@
 pdir = "./output"
 if (!dir.exists(pdir)) {dir.create(pdir)}
 
-psubdir = file.path(pdir, paste0("required-",as.character(required)))
+psubdir = file.path(pdir, paste0(
+  "studies-", paste(studies, collapse = "-"),
+  "-required-", as.character(required)))
 if (!dir.exists(psubdir)) {dir.create(psubdir)}
 
 ## Plot demographic data
@@ -21,11 +23,11 @@ get.percent = function(title, variable) {
   print(out)
 }
 
-sink(file = file.path(pdir, paste0("required-",as.character(required)), "Demographics - summary statistics.txt"), type ="output")
+sink(file = file.path(psubdir, "Demographics - summary statistics.txt"), type ="output")
 summary(df)
 sink(file = NULL)
 
-sink(file = file.path(pdir, paste0("required-",as.character(required)), "Demographics - percentages.txt"))
+sink(file = file.path(psubdir, "Demographics - percentages.txt"))
 get.percent("Sex", df$sex)
 get.percent("Residence", df$res)
 get.percent("Education", df$edu)
