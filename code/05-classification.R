@@ -3,6 +3,11 @@
 odir = "./classification"
 if (!dir.exists(odir)) {dir.create(odir)}
 
+osubdir = file.path(odir, paste0(
+  "studies-", paste(studies, collapse = "-"),
+  "-required-", as.character(required)))
+if (!dir.exists(osubdir)) {dir.create(osubdir)}
+
 ## Define functions
 
 get.distances = function(data, centroids) {
@@ -216,9 +221,9 @@ h = ggplotly(p) %>%
   layout(font = list(family = 'Arial'),
          legend = list(orientation = 'h', xanchor = "center", x = 0.5))
 
-setwd(odir)
+setwd(osubdir)
 saveWidget(as_widget(h), "classification-plotly.html")
-setwd('..')
+setwd('../..')
 
 ## Find optimal set of thresholds for classification with genetic algorithm
 
@@ -233,19 +238,18 @@ noffspring = 10
 factor = 50
 niter = 100000
 
-logfile = file.path(odir, "genetic.log")
+logfile = file.path(osubdir, "genetic.log")
 
-out = run.genetic(initial_thr, expected_class_size, 
-                  distances_from_classes, labels_categories, 
+genetic = run.genetic(initial_thr, expected_class_size,
+                  distances_from_classes, labels_categories,
                   nbest, noffspring, factor, niter, logfile)
-save(out, file = file.path(odir, "genetic-out.RData"))
 
 ## For each story return a classification label
 
 classes = matrix(NA, nrow=nstories, ncol=1)
 
 #thr = initial_thr
-thr = out$solution
+thr = genetic$solution
 
 for(i in ords) {
    classes[i+1] = get.classes(distances_from_classes[i+1,], thr, labels_categories)
@@ -255,13 +259,24 @@ classes = data.frame(class = classes)
 
 ## Preview the classification results
 
-means = transposed_story_mean_ratings %>%
-  ungroup() %>%
-  select(matches("mean"))
+results = bind_cols(select(items, "code"),
+               classes, 
+               select(transposed_story_mean_ratings, -starts_with("n.")), 
+               distances) %>%
+  mutate(category = ord_to_category[as.character(ord)]) %>%
+  relocate("ord", "code", "category", "class")
 
-df = bind_cols(items, classes, means, distances)
-
-colnames(df) = c(colnames(items),
-                 "class",
+colnames(results) = c("ord", "code", "category", "class",
                  paste("M", labels_scales, sep = "."),
                  paste("D", c(labels_categories, "MID"), sep = "."))
+
+## How to use:
+# results %>% filter(class == category)
+# results %>% filter(class == category & category == "NEU")
+# results %>% filter(class != category & category == "NEU")
+# results %>% filter(class != category & category == "NEU") %>% group_by(class) %>% summarise(n = n())
+
+write.csv(results, file = file.path(osubdir, "classification-results.csv"))
+
+save(best_stories, worst_stories, genetic, results, 
+     file = file.path(osubdir, "classification-results.RData"))
