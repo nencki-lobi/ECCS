@@ -13,6 +13,8 @@ library('fields')
 library('plotly')
 library('htmlwidgets')
 
+set.seed(2137) # set seed for replicability
+
 source('./code/01-preproc.R', local = knitr::knit_global())
 source('./code/02-helpers.R', local = knitr::knit_global())
 source('./code/03-derivatives.R', local = knitr::knit_global())
