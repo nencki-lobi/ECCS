@@ -30,7 +30,8 @@ transposed_demo = mutate(transposed_demo, age = current_year - as.numeric(year))
 
 story_mean_ratings = ratings %>%
   group_by(ord, part) %>%
-  summarise(mean = mean(opt), n = n())
+  summarise(mean = mean(opt), n = n()) %>%
+  ungroup()
 
 transposed_story_mean_ratings = story_mean_ratings %>%
   pivot_wider(id_cols = "ord",
@@ -46,7 +47,8 @@ ratings_M = filter(ratings, ratings$sid %in% demo_M$sid)
 
 story_mean_ratings_M = ratings_M %>%
   group_by(ord, part) %>%
-  summarise(mean = mean(opt), n = n())
+  summarise(mean = mean(opt), n = n()) %>%
+  ungroup()
 
 ## Female sample
 
@@ -55,7 +57,8 @@ ratings_F = filter(ratings, ratings$sid %in% demo_F$sid)
 
 story_mean_ratings_F = ratings_F %>%
   group_by(ord, part) %>%
-  summarise(mean = mean(opt), n = n())
+  summarise(mean = mean(opt), n = n()) %>%
+  ungroup()
 
 # For each story obtain demographic profile
 
@@ -67,7 +70,8 @@ story_sex_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
   pivot_wider(id_cols = "ord",
               names_from = sex,
               names_sep = ".",
-              values_from = "n")
+              values_from = "n") %>%
+  ungroup()
 
 story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
   group_by(ord, concern) %>%
@@ -75,11 +79,13 @@ story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
   pivot_wider(id_cols = "ord",
               names_from = concern,
               names_sep = ".",
-              values_from = "n")
+              values_from = "n") %>%
+  ungroup()
 
 # For each participant calculate mean ratings for each stimulus category and each rating scale
 
 participant_mean_ratings =
   mutate(ratings, category = ord_to_category[as.character(ratings$ord)]) %>%
   group_by(sid, code, category, part) %>%
-  summarise(mean = mean(opt), n = n())
+  summarise(mean = mean(opt), n = n()) %>%
+  ungroup()
