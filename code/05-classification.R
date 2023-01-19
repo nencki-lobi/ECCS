@@ -244,6 +244,30 @@ genetic = run.genetic(initial_thr, expected_class_size,
                   distances_from_classes, labels_categories,
                   nbest, noffspring, factor, niter, logfile)
 
+## Visual inspection of the genetic algorithm's performance
+
+df = read.table(text = gsub("Iteration: ", "",
+                            gsub(" \\| Best fitness: ", ",",
+                                 gsub(" \\| Mean fitness: ", ",", 
+                                      readLines(logfile)))), 
+                sep = ",", strip.white = T)
+
+colnames(df) = c("iter", "bfit", "mfit")
+
+p = ggplot(df, aes(x=iter, y=bfit)) +
+  geom_line() +
+  xlab("Iteration") + ylab("Fitness") +
+  scale_x_continuous(limits = c(0, 100000),
+                     breaks=seq(0, 100000, by=25000),
+                     labels = c("0", "25K", "50K", "75K", "100K")) +
+  scale_y_continuous(limits = c(0, 50),
+                     breaks=seq(0, 50, by=10)) +
+  beauty
+
+ggsave(paste("genetic-algorithm-performance.png"), 
+       width = 1000, height = 1000, units = "px",
+       p, path = osubdir)
+
 ## For each story return a classification label
 
 classes = matrix(NA, nrow=nstories, ncol=1)
