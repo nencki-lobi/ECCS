@@ -114,15 +114,20 @@ run.genetic = function(initial_thr, expected_class_size, distances, labels, nbes
   
 }
 
-## Visual inspection of the data
+## Visual inspection of the data distribution
 
 df = ratings
 df$part = factor(df$part)
 
 p = ggplot(df, aes(x=opt)) +
-  geom_histogram(bins=100, color = "gray") +
+  geom_histogram(bins=100, color = "grey", fill = "grey") +
+  xlab("Value") + ylab("Count") +
   facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) +
   beauty
+
+ggsave(paste("data-distribution.png"), 
+       width = 2000, height = 1200, units = "px",
+       p, path = osubdir)
 
 ## Initial setup
 
