@@ -18,6 +18,8 @@ set.seed(2137) # set seed for replicability
 source('./code/01-preproc.R', local = knitr::knit_global())
 source('./code/02-helpers.R', local = knitr::knit_global())
 source('./code/03-derivatives.R', local = knitr::knit_global())
-source('./code/04-plots.R', local = knitr::knit_global())
-source('./code/05-classification.R', local = knitr::knit_global())
+source('./code/04-plots-within-studies.R', local = knitr::knit_global())
+if (params$studies == "c(13,14,15)") {
+  source('./code/05-plots-between-studies.R', local = knitr::knit_global())}
+source('./code/06-classification.R', local = knitr::knit_global())
 ```

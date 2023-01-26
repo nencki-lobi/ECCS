@@ -60,6 +60,14 @@ story_mean_ratings_F = ratings_F %>%
   summarise(mean = mean(opt), n = n()) %>%
   ungroup()
 
+## Different studies
+
+story_mean_ratings_study = ratings %>%
+  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
+  group_by(ord, study, part) %>%
+  summarise(mean = mean(opt), n = n()) %>%
+  ungroup()
+
 # For each story obtain demographic profile
 
 subjects.ords = select(ratings, sid, code, stid, ord) %>% distinct()
