@@ -6,7 +6,7 @@ colnames(ratings) = c("sid","code","stid","name","ord", "part", "opt")
 demo = read.table("./data/rtask-demo.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
 colnames(demo) = c("sid","code","stid","name","ord", "val")
 
-items = read.table("./data/rtask-items.tsv", header = F, sep = "\t", encoding = "UTF-8")
+items = read.table("./data/rtask-items.tsv", header = F, sep = "\t", quote = "", encoding = "UTF-8")
 colnames(items) = c("PL","EN","NO","code")
 
 ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
