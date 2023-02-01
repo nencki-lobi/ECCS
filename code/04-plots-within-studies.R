@@ -161,11 +161,23 @@ for(i in 0:6) {
 }
 
 ### Wrapped plot
-p = plot.fig3(df) + 
+p = df %>% plot.fig3 +
   facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
   labs(title ="Mean ratings on each of the scales") +
   scale_x_discrete(labels = NULL)
 ggsave("Fig 3 - Wrap - ratings by story type.png", p, width = 15, height = 10, path = psubdir)
+
+p = filter(df, part <= 1) %>% plot.fig3 +
+  facet_wrap(~part, ncol = 1, labeller = as_labeller(part_to_scale)) + 
+  labs(title ="Mean ratings on each of the scales") +
+  scale_x_discrete(labels = NULL)
+ggsave("Fig 3a - Wrap - ratings by story type.png", p, width = 5, height = 6, path = psubdir)
+
+p = filter(df, part > 1) %>% plot.fig3 +
+  facet_wrap(~part, ncol = 3, labeller = as_labeller(part_to_scale)) + 
+  labs(title ="Mean ratings on each of the scales") +
+  scale_x_discrete(labels = NULL)
+ggsave("Fig 3b - Wrap - ratings by story type.png", p, width = 10, height = 8, path = psubdir)
   
 ## Plot mean valence and arousal ratings for each story
 
