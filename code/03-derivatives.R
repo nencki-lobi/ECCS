@@ -1,3 +1,10 @@
+# Keep stories information in one place
+
+stories = items %>%
+  mutate(ord = ords) %>%
+  mutate(category = ord_to_category[as.character(ord)]) %>%
+  relocate("ord", "code", "category")
+
 # Change data format from long to wide
 
 transposed_ratings = ratings %>%

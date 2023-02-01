@@ -288,12 +288,10 @@ classes = data.frame(class = classes)
 
 ## Preview the classification results
 
-results = bind_cols(select(items, "code"),
+results = bind_cols(select(stories, "ord", "code", "category"),
                classes, 
-               select(transposed_story_mean_ratings, -starts_with("n.")), 
-               distances) %>%
-  mutate(category = ord_to_category[as.character(ord)]) %>%
-  relocate("ord", "code", "category", "class")
+               select(transposed_story_mean_ratings, starts_with("mean.")), 
+               distances)
 
 colnames(results) = c("ord", "code", "category", "class",
                  paste("M", labels_scales, sep = "."),
