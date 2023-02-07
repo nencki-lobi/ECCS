@@ -15,30 +15,32 @@ get.distances = function(data, centroids) {
   avgD = colMeans(D) # average over the sample
 }
 
-get.classes = function(distances, thr, labels) {
+get.classes = function(category, distances, thr, labels) {
   
   # define criteria
   
-  # Two conditions have to be satisfied in order to classify a word to one of
-  # the classes: (1) the word's distance to the emotion or neutral
-  # state must be smaller than a certain threshold; (2) the word must meet
-  # the first condition for one category only; in other words, if it falls
-  # within an area of intersection of two categories, it remains
-  # unclassified. Thus, words more distant from all the classes than the
-  # respective thresholds remain unclassified, and so do words that are close
-  # (in this sense) to two or more classes.
+  # The following conditions have to be satisfied in order to classify a story 
+  # to one of the classes: 
+  # (1) The story’s distance to the respective class must be smaller than a certain threshold.
+  # (2) The story must meet the first condition for one class only.
+  # (3) If the story falls within an area of intersection of two (or more) classes, it remains unclassified.
+  # (4) If the story does not meet the first condition for any of the classes, it remains unclassified.
+  # (5) Assigned class must match initial category label.
   
   criterion1 = distances < thr  # distance of at least this threshold
   criterion2 = sum(criterion1) == 1
   
-  class = ifelse(criterion2, labels[criterion1], "unclassified")
+  label = labels[criterion1]
+  
+  class = ifelse(criterion2, 
+                 ifelse(label == category, label, "unclassified"),"unclassified")
 }
 
 mutate.individual = function(x, f) {
   x + (runif(1) - 0.5) * f
 }
 
-run.genetic = function(initial_thr, expected_class_size, distances, labels, nbest, noffspring, factor, niter, logfile) {
+run.genetic = function(initial_thr, expected_class_size, categories, distances, labels, nbest, noffspring, factor, niter, logfile) {
   
   nlabels = length(labels)
   npopulation = nbest * noffspring
@@ -64,7 +66,7 @@ run.genetic = function(initial_thr, expected_class_size, distances, labels, nbes
       thr = population[individual,]
       
       for (story in 1:nstories) {
-        classification[story] = get.classes(distances[story,], thr, labels)
+        classification[story] = get.classes(categories[story], distances[story,], thr, labels)
       }
       
       for (lab in 1:nlabels) {
@@ -141,6 +143,10 @@ colnames(centroids) = labels_scales[-c(1,2)]
 nstories = length(ords)
 ncentroids = nrow(centroids)
 
+## For each story get its initial category label
+
+categories = stories$category
+
 ## For each story get its distance from each of the classes
 
 distances = matrix(NA, nrow=nstories, ncol=ncentroids)
@@ -189,7 +195,7 @@ for(thr in thresholds) {
   classes = matrix(NA, nrow=nstories, ncol=1)  
   
   for(i in ords) {
-    classes[i+1] = get.classes(distances_from_classes[i+1,], thr, labels_categories)
+    classes[i+1] = get.classes(categories[i+1], distances_from_classes[i+1,], thr, labels_categories)
   }
   
   subdf = as.data.frame(classes)
@@ -246,7 +252,7 @@ niter = 100000
 logfile = file.path(osubdir, "genetic.log")
 
 genetic = run.genetic(initial_thr, expected_class_size,
-                  distances_from_classes, labels_categories,
+                  categories, distances_from_classes, labels_categories,
                   nbest, noffspring, factor, niter, logfile)
 
 ## Visual inspection of the genetic algorithm's performance
@@ -281,7 +287,7 @@ classes = matrix(NA, nrow=nstories, ncol=1)
 thr = genetic$solution
 
 for(i in ords) {
-   classes[i+1] = get.classes(distances_from_classes[i+1,], thr, labels_categories)
+   classes[i+1] = get.classes(categories[i+1], distances_from_classes[i+1,], thr, labels_categories)
 }
 
 classes = data.frame(class = classes)
