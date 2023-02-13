@@ -4,7 +4,8 @@ output: html_document
 params:
   studies: c(13,14,15)
   required: 10
-  k: 6
+  l: ANG,COM,HOP,NEU
+  k: 9
 ---
 
 ```{r include=FALSE, echo=FALSE}

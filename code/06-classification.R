@@ -5,7 +5,9 @@ if (!dir.exists(odir)) {dir.create(odir)}
 
 osubdir = file.path(odir, paste0(
   "studies-", paste(studies, collapse = "-"),
-  "-required-", as.character(required)))
+  "-required-", as.character(required),
+  "-l-", str_replace_all(params$l, ",", "-"),
+  "-k-", as.character(params$k)))
 if (!dir.exists(osubdir)) {dir.create(osubdir)}
 
 ## Define functions
@@ -168,7 +170,7 @@ for(i in ords) {
 
 colnames(distances) = c(labels_categories, "MID")
 
-distances_from_classes = distances[,labels_categories]
+distances_from_corners = distances[,labels_categories]
 distance_from_the_middle = distances[,"MID"]
 
 ## Best and worst stories
@@ -195,7 +197,7 @@ for(thr in thresholds) {
   classes = matrix(NA, nrow=nstories, ncol=1)  
   
   for(i in ords) {
-    classes[i+1] = get.classes(categories[i+1], distances_from_classes[i+1,], thr, labels_categories)
+    classes[i+1] = get.classes(categories[i+1], distances_from_corners[i+1,], thr, labels_categories)
   }
   
   subdf = as.data.frame(classes)
@@ -238,10 +240,11 @@ setwd('../..')
 
 ## Find optimal set of thresholds for classification with genetic algorithm
 
+l = unlist(strsplit(params$l, split = ","))
 k = params$k
-n = ncentroids-1
+n = length(l)
 
-initial_thr = apply(distances_from_classes, 2, sort)[k,]
+initial_thr = apply(distances[,l], 2, sort)[k,]
 expected_class_size = as.integer(rep(k, n))
 
 nbest = 10
@@ -252,7 +255,7 @@ niter = 100000
 logfile = file.path(osubdir, "genetic.log")
 
 genetic = run.genetic(initial_thr, expected_class_size,
-                  categories, distances_from_classes, labels_categories,
+                  categories, distances[,l], l,
                   nbest, noffspring, factor, niter, logfile)
 
 ## Visual inspection of the genetic algorithm's performance
@@ -287,7 +290,7 @@ classes = matrix(NA, nrow=nstories, ncol=1)
 thr = genetic$solution
 
 for(i in ords) {
-   classes[i+1] = get.classes(categories[i+1], distances_from_classes[i+1,], thr, labels_categories)
+   classes[i+1] = get.classes(categories[i+1], distances[i+1,l], thr, l)
 }
 
 classes = data.frame(class = classes)
