@@ -71,7 +71,8 @@ story_mean_ratings_F = ratings_F %>%
 
 story_mean_ratings_study = ratings %>%
   mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
-  group_by(ord, study, part) %>%
+  mutate(category = ord_to_category[as.character(ord)]) %>%
+  group_by(category, ord, study, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
   ungroup()
 
@@ -100,7 +101,8 @@ story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
 # For each participant calculate mean ratings for each stimulus category and each rating scale
 
 participant_mean_ratings =
+  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
   mutate(ratings, category = ord_to_category[as.character(ratings$ord)]) %>%
-  group_by(sid, code, category, part) %>%
+  group_by(study, stid, sid, code, category, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
   ungroup()

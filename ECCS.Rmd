@@ -12,6 +12,7 @@ library('tidyverse')
 library('fields')
 library('plotly')
 library('htmlwidgets')
+library('rstatix')
 
 set.seed(2137) # set seed for replicability
 
