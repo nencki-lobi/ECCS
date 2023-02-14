@@ -2,7 +2,7 @@
 
 stories = items %>%
   mutate(ord = ords) %>%
-  mutate(category = as.factor(ord_to_category[as.character(ord)])) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category")
 
 # Change data format from long to wide
@@ -39,7 +39,7 @@ story_mean_ratings = ratings %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = as.factor(ord_to_category[as.character(ord)])) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category", "part") %>%
   ungroup()
 
@@ -59,7 +59,7 @@ story_mean_ratings_M = ratings_M %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = as.factor(ord_to_category[as.character(ord)])) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category", "part") %>%
   ungroup()
 
@@ -72,7 +72,7 @@ story_mean_ratings_F = ratings_F %>%
   group_by(ord, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = as.factor(ord_to_category[as.character(ord)])) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category", "part") %>%
   ungroup()
 
@@ -83,7 +83,7 @@ story_mean_ratings_study = ratings %>%
   group_by(ord, part, study) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = as.factor(ord_to_category[as.character(ord)])) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category", "part") %>%
   ungroup()
 
@@ -112,7 +112,7 @@ story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
 # For each participant calculate mean ratings for each stimulus category and each rating scale
 
 participant_mean_ratings = ratings %>%
-  mutate(category = as.factor(ord_to_category[as.character(ord)])) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   group_by(code, sid, stid, category, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%

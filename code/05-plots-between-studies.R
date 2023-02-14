@@ -17,7 +17,7 @@ df = story_mean_ratings_study %>%
               names_sort = T,
               values_from = c("mean","n"))
 
-plot.fig7 = function(data) {
+plot.fig9 = function(data) {
   ggplot(data, aes(mean.1, mean.2, label = code, colour=factor(category))) +
     geom_point() +
     xlim(c(-1,100)) + ylim(c(-1,100)) +
@@ -31,13 +31,13 @@ plot.fig7 = function(data) {
 ### Separate plots
 for (i in 0:6) {
   subdf = filter(df, part == i)
-  p = plot.fig7(subdf) +
+  p = plot.fig9(subdf) +
     labs(title = paste("Differences in mean ratings of stories on", tolower(labels_scales[i+1]) , "scale"))
-  ggsave(paste("Fig 7 -", part_to_scale[i+1], "- ratings by study.png"), p, path = psubdir)
+  ggsave(paste("Fig 9 -", part_to_scale[i+1], "- ratings by study.png"), p, path = psubdir)
 }
 
 ### Wrapped plots
-p = plot.fig7(df) +
+p = plot.fig9(df) +
   facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
   labs(title = "Differences in mean ratings of stories on each scale")
-ggsave("Fig 7 - Wrap - ratings by study.png", p, width = 15, height = 10, path = psubdir)
+ggsave("Fig 9 - Wrap - ratings by study.png", p, width = 15, height = 10, path = psubdir)

@@ -25,4 +25,7 @@ categories = ord_to_category[as.character(ords)]
 # ord_to_code["0"]
 # ord_to_category["0"]
 
-beauty = theme_linedraw() + theme(panel.grid = element_blank(), aspect.ratio = 1)
+beauty = theme_linedraw() + theme(panel.grid = element_blank(),
+                                  strip.background = element_rect(fill = "white", color = "white"),
+                                  strip.text = element_text(colour = "black", size = 12),
+                                  aspect.ratio = 1)
