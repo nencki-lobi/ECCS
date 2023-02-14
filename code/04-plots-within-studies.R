@@ -113,8 +113,7 @@ ggsave(paste0("Fig 1 - Demographics - ", name, ".png"), p, path = psubdir)
 
 ## Plot mean ratings for each story with stories ordered by number (ord)
 
-df = story_mean_ratings %>%
-  mutate(category = ord_to_category[as.character(ord)])
+df = story_mean_ratings
   
 plot.fig2 = function(data) {
   ggplot(data, aes(x=ord, y=mean, colour=factor(category))) + 
@@ -140,8 +139,7 @@ ggsave("Fig 2 - Wrap - ratings by story number.png", p, width = 15, height = 10,
 
 ## Plot mean ratings for each story type
 
-df = story_mean_ratings %>%
-  mutate(category = ord_to_category[as.character(ord)])
+df = story_mean_ratings
 
 plot.fig3 = function(data) {
   ggplot(data, aes(x=category, y=mean, fill=factor(category))) + 
@@ -163,19 +161,19 @@ for(i in 0:6) {
 ### Wrapped plot
 p = df %>% plot.fig3 +
   facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
-  labs(title ="Mean ratings on each of the scales") +
+  labs(title = "Mean ratings on each of the scales") +
   scale_x_discrete(labels = NULL)
 ggsave("Fig 3 - Wrap - ratings by story type.png", p, width = 15, height = 10, path = psubdir)
 
 p = filter(df, part <= 1) %>% plot.fig3 +
   facet_wrap(~part, ncol = 1, labeller = as_labeller(part_to_scale)) + 
-  labs(title ="Mean ratings on each of the scales") +
+  labs(title = "Mean ratings on each of the scales") +
   scale_x_discrete(labels = NULL)
 ggsave("Fig 3a - Wrap - ratings by story type.png", p, width = 5, height = 6, path = psubdir)
 
 p = filter(df, part > 1) %>% plot.fig3 +
   facet_wrap(~part, ncol = 3, labeller = as_labeller(part_to_scale)) + 
-  labs(title ="Mean ratings on each of the scales") +
+  labs(title = "Mean ratings on each of the scales") +
   scale_x_discrete(labels = NULL)
 ggsave("Fig 3b - Wrap - ratings by story type.png", p, width = 10, height = 8, path = psubdir)
   
@@ -183,13 +181,12 @@ ggsave("Fig 3b - Wrap - ratings by story type.png", p, width = 10, height = 8, p
 
 df = story_mean_ratings %>%
   filter(part =="0" | part =="1") %>%
-  pivot_wider(id_cols = "ord",
+  pivot_wider(id_cols = c("ord", "category"),
                 names_from = part,
                 names_sep = ".",
-                values_from = "mean") %>%
-  mutate(category = ord_to_category[as.character(ord)])
+                values_from = "mean")
 
-colnames(df) = c("ord","valence","arousal","category")
+colnames(df) = c("ord","category","valence","arousal")
 
 plot.fig4 = function(data){
   ggplot(data, aes(x=valence, y=arousal, colour=factor(group))) +
@@ -201,10 +198,10 @@ plot.fig4 = function(data){
 
 ### Separate plots
 for(i in 1:6) {
-  subdf = df %>% mutate(is_category = case_when(
+  subdf = df %>% mutate(group = case_when(
     grepl(labels_categories[i], category) ~ labels_categories[i],
     TRUE ~ "Other"))
-  colnames(subdf) = c("ord","valence","arousal","category","group")
+
   p = plot.fig4(subdf) +
     labs(title = paste("Mean valence and arousal for", labels_categories[i], "stories"))
   ggsave(paste("Fig 4 -", labels_categories[i], "- valence & arousal ratings.png"), p, path = psubdir)
@@ -253,10 +250,10 @@ ggsave("Fig 5 - Wrap - ratings by CC concern.png",p , width = 15, height = 10, p
 
 ## Plot comparison of mean ratings in male and female samples
 
-df = full_join(story_mean_ratings_M, story_mean_ratings_F, by = c("ord","part"), suffix = c(".m", ".w")) %>%
-  select("ord","part","mean.m","mean.w") %>%
-  mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = ord_to_category[as.character(ord)])
+df = full_join(story_mean_ratings_M, story_mean_ratings_F, 
+               by = c("ord","code","category","part"), 
+               suffix = c(".m", ".w")) %>%
+  select("ord","code","category","part","mean.m","mean.w")
 
 plot.fig6 = function(data) {
   ggplot(data, aes(x = mean.m, y = mean.w, label = code, colour=factor(category))) +

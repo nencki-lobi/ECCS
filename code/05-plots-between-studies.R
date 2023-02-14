@@ -11,14 +11,11 @@ if (!dir.exists(psubdir)) {dir.create(psubdir)}
 ## Plot comparison of mean ratings between studies
 
 df = story_mean_ratings_study %>%
-  pivot_wider(id_cols = c("ord","part"),
+  pivot_wider(id_cols = c("ord","code","category","part"),
               names_from = "study",
               names_sep = ".",
               names_sort = T,
-              values_from = c("mean","n")) %>%
-  mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = ord_to_category[as.character(ord)]) %>%
-  relocate("ord", "part", "code", "category")
+              values_from = c("mean","n"))
 
 plot.fig7 = function(data) {
   ggplot(data, aes(mean.1, mean.2, label = code, colour=factor(category))) +
