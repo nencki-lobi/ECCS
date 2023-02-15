@@ -216,8 +216,15 @@ transposed_df = df %>%
               values_from = "n",
               values_fill = list(n = 0))
 
-labels = c("unclassified", "NEU", "HOP", "COM", "ANG", "ANX", "GUI")
-colors = c("gray", "#96949B", "#69A2B0", "#FEAEA5", "#E05263", "#659157", "#6C5670")
+labels = df %>% 
+  group_by(class) %>% 
+  summarise(max = max(n)) %>% 
+  arrange(desc(max)) %>% 
+  select(class)
+
+labels = labels$class
+colors = colors_classes[labels]
+
 df$class = factor(df$class, levels = labels)
 
 p = ggplot(df, aes(x=thr, y=n, fill=class)) +
@@ -316,3 +323,30 @@ write.csv(results, file = file.path(osubdir, "classification-results.csv"))
 
 save(best_stories, worst_stories, genetic, results, 
      file = file.path(osubdir, "classification-results.RData"))
+
+## Create a martix of scatterplots to visualise classes 
+
+labels = c("unclassified", l)
+colors = colors_classes[labels]
+
+df = results %>%
+  select("ord", "category", "class", starts_with("M.")) %>%
+  mutate(class = factor(class, levels = labels)) %>%
+  arrange(class)
+
+colnames(df) = c("ord", "category", "class", labels_scales)
+
+png(file.path(osubdir, "scatterplot-matrix.png"),
+    width=12, height=12, units="in", res=300)
+
+par(mar=c(4,4,1,1))
+
+pairs(df[,4:10], pch = 19, cex = 1,
+      col = colors[df$class],
+      cex.labels = 2, 
+      cex.axis = 2,
+      xlim = c(0,100),
+      ylim = c(0,100),
+      upper.panel=NULL)
+
+dev.off()

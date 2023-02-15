@@ -2,9 +2,15 @@
 
 ords = 0:179
 parts = 0:6
+
 labels_scales = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
+
 labels_categories = c("ANG", "ANX", "COM", "GUI", "HOP", "NEU")
-colors_categories = c("#E05263", "#659157", "#FEAEA5", "#6C5670", "#69A2B0", "#96949B")
+colors_categories = c("#E05263", "#659157", "#FEAEA5", "#6C5670", "#46b7d3", "#96949B")
+
+labels_classes = c(labels_categories, "unclassified")
+colors_classes = c(colors_categories, "gray85")
+names(colors_classes) = labels_classes
 
 code_to_ord = ords
 names(code_to_ord) = items$code
