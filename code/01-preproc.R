@@ -12,6 +12,9 @@ colnames(items) = c("PL","EN","NO","code")
 ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
 colnames(ranking) = c("sid","code","stid","rank")
 
+times = read.table("./data/rtask-time.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
+colnames(times) = c("sid","code","stid","name","ord", "pres_time", "eval_time")
+
 # Studies to be included
 
 studies = eval(parse(text = params$studies))

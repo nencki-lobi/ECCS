@@ -118,3 +118,28 @@ participant_mean_ratings = ratings %>%
   mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
   relocate("code", "sid", "stid", "study", "category", "part") %>%
   ungroup()
+
+# Mean response and evaluation times
+
+## Remove outliers
+
+remove_outliers = function(df, variable) {
+  Q1 = quantile(df[[variable]], .25, na.rm = TRUE)
+  Q3 = quantile(df[[variable]], .75, na.rm = TRUE)
+  IQR = IQR(df[[variable]], na.rm = TRUE)
+  outdf = subset(df, df[[variable]] > (Q1 - 1.5*IQR) & df[[variable]] < (Q3 + 1.5*IQR))
+}
+
+times_cleaned = intersect(remove_outliers(times, "pres_time"), 
+                          remove_outliers(times, "eval_time"))
+times_to_say_goodbye = setdiff(remove_outliers(times, "pres_time"), 
+                               remove_outliers(times, "eval_time"))
+
+mean_times = times_cleaned %>%
+  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
+  group_by(study, ord) %>%
+  summarise(mean_pres = mean(pres_time), mean_eval = mean(eval_time), n = n()) %>%
+  mutate(code = ord_to_code[as.character(ord)]) %>%
+  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
+  relocate("ord", "code", "category", "study", "mean_pres", "mean_eval", "n") %>%
+  ungroup()
