@@ -13,7 +13,8 @@ library('tidyverse')
 library('fields')
 library('plotly')
 library('htmlwidgets')
-library('rstatix')
+#library('rstatix')
+library('broom')
 
 set.seed(2137) # set seed for replicability
 
@@ -24,4 +25,5 @@ source('./code/04-plots-within-studies.R', local = knitr::knit_global())
 if (params$studies == "c(13,14,15)") {
   source('./code/05-plots-between-studies.R', local = knitr::knit_global())}
 source('./code/06-classification.R', local = knitr::knit_global())
+source('./code/07-stats.R', local = knitr::knit_global())
 ```
