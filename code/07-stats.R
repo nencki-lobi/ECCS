@@ -64,7 +64,20 @@ print.me("Shapiro-Wilk normality of ratings distribution - Study 2", check.norma
 print.me("Correlations of mean ratings on each scale between studies", get.correlations(df,"part","mean.1","mean.2"))
 sink(file = NULL)
 
-##########
+# Differences in mean ratings between concern groups
+
+df = full_join(transposed_demo,participant_mean_ratings) %>%
+  mutate(concern_group = recode(concern, "1"="1", "2"="1", "3"="1", "4"="2", "5"="3")) %>%
+  mutate(across(c("part", "concern_group"), as.character)) %>%
+  relocate(concern_group, .after = concern)
+
+sink(file = file.path(psubdir,"Differences - mean ratings in concern groups.txt"), type ="output")
+rstatix::anova_test(
+data = df, dv = mean, wid = sid,
+between = concern_group, within = c(category, part)
+)
+sink(file = NULL)
+
 
 # Correlations - times
 
@@ -82,5 +95,40 @@ print.me("Shapiro-Wilk normality of presentation time distribution", check.norma
 print.me("Shapiro-Wilk normality of evaluation time distribution", check.normality(mean_times,"study","mean_eval"))
 print.me("Correlations of presentation times between studies", get.correlations(df,"category","mean_pres.1","mean_pres.2"))
 print.me("Correlations of evaluation times between studies", get.correlations(df,"category","mean_eval.1","mean_eval.2"))
+sink(file = NULL)
+
+# Story length differences
+
+story_len = items %>%
+  mutate(len_PL = nchar(PL), len_EN = nchar(EN), len_NO = nchar(NO)) %>%
+  mutate(category = ord_to_category)
+
+get.summary = function(df,lang) {
+  df %>% select(lang = {{lang}}) %>%
+    summary(lang)
+}
+
+# story_len %>% anova_test(len_PL ~ category)
+# summary(aov(len_PL ~ category, story_len))
+
+# get.anova = function( df, dv, iv) {
+#   df %>% select(dv = {{dv}}, iv = {{iv}}) %>% 
+#   df %>% anova_test(dv ~ iv, df)
+# }
+# 
+# sink(file = file.path(psubdir,"test.txt"), type ="output")
+# print.me("Stories in Polish", get.anova(story_len,"len_PL", "category"))
+# print.me("Stories in English", get.anova(story_len,"len_EN", "category"))
+# print.me("Stories in Norwegian", get.anova(story_len,"len_NO", "category"))
+# sink(file = NULL)
+
+
+sink(file = file.path(psubdir,"Differences - story length.txt"), type ="output")
+print.me("Stories in Polish", get.summary(story_len,"len_PL"))
+summary(aov(len_PL ~ category, story_len))
+print.me("Stories in English", get.summary(story_len,"len_EN"))
+summary(aov(len_EN ~ category, story_len))
+print.me("Stories in Norwegian", get.summary(story_len,"len_NO"))
+summary(aov(len_NO ~ category, story_len))
 sink(file = NULL)
 
