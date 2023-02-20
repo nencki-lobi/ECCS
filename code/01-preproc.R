@@ -1,40 +1,63 @@
 # Load data
 
-ratings = read.table("./data/rtask-ratings.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
-colnames(ratings) = c("sid","code","stid","name","ord", "part", "opt")
-
-demo = read.table("./data/rtask-demo.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
-colnames(demo) = c("sid","code","stid","name","ord", "val")
-
 items = read.table("./data/rtask-items.tsv", header = F, sep = "\t", quote = "", encoding = "UTF-8")
-colnames(items) = c("PL","EN","NO","code")
+colnames(items) = c("PL", "EN", "NO", "code")
+
+subjects = read.table("./data/rtask-subject.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
+colnames(subjects) = c("sid", "code", "stid")
+
+external = read.table("./data/rtask-subject-external.csv", header = F, sep = "", strip.white = T, encoding = "UTF-8")
+colnames(external) = c("sid")
 
 ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
-colnames(ranking) = c("sid","code","stid","rank")
+colnames(ranking) = c("sid", "code", "stid", "rank")
+
+demo = read.table("./data/rtask-demo.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
+colnames(demo) = c("sid", "code", "stid", "name", "ord", "val")
+
+ratings = read.table("./data/rtask-ratings.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
+colnames(ratings) = c("sid", "code", "stid", "name", "ord", "part", "opt")
 
 times = read.table("./data/rtask-time.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
-colnames(times) = c("sid","code","stid","name","ord", "pres_time", "eval_time")
+colnames(times) = c("sid", "code", "stid", "name", "ord", "pres_time", "eval_time")
 
 # Studies to be included
 
 studies = eval(parse(text = params$studies))
 
-ratings = filter(ratings, stid %in% studies)
-demo = filter(demo, stid %in% studies)
+subjects = filter(subjects, stid %in% studies)
 ranking = filter(ranking, stid %in% studies)
+demo = filter(demo, stid %in% studies)
+ratings = filter(ratings, stid %in% studies)
+times = filter(times, stid %in% studies)
 
-# Data cleaning
+# Subjects to keep
 
-## Remove underage participants
+## For participants recruited by the company, keep those who passed quality check
 
-subjects = filter(demo, ord == 2 & as.numeric(val) < 2005)$sid
-ratings = filter(ratings, sid %in% subjects)
-demo = filter(demo, sid %in% subjects)
+if (15 %in% studies) {
+  subjects = subjects %>% 
+    filter((stid == 13) | 
+           (stid == 14) | 
+           (stid == 15 & sid %in% external$sid))
+}
 
-## Remove participants who rated insufficient number of stories (items)
+## Find participants with required number of stories rated
 
 required = params$required
+list1 = filter(ranking, rank >= required)$sid
 
-subjects = filter(ranking, rank >= required)$sid
-ratings = filter(ratings, sid %in% subjects)
-demo = filter(demo, sid %in% subjects)
+## Find adult participants
+
+list2 = filter(demo, ord == 2 & as.numeric(val) < 2005)$sid
+
+## Final list of subjects
+
+subjects = subjects %>% filter(sid %in% intersect(list1, list2))
+# subjects %>% group_by(stid) %>% summarise(n=n())
+
+# Clean data
+
+demo = filter(demo, sid %in% subjects$sid)
+ratings = filter(ratings, sid %in% subjects$sid)
+times = filter(times, sid %in% subjects$sid)
