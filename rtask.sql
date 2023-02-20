@@ -1,6 +1,15 @@
 \f '|'
 \pset footer
 
+-- Subjects
+
+\o ./data/rtask-subject.csv
+
+SELECT sid, code, stid
+FROM subject 
+WHERE stid IN (13,14,15) 
+ORDER BY stid;
+
 -- Subjects ranked by number of items rated
 
 \o ./data/rtask-subject-ranking.csv
@@ -11,8 +20,8 @@ JOIN qcopy q ON q.rid = s.sid
 JOIN bchoice b ON b.qid = q.qid
 WHERE s.stid IN (13, 14, 15)
  AND q.name = 'rateme-pl'
-GROUP by s.sid, q.qid
-ORDER by count(*) DESC;
+GROUP BY s.sid, q.qid
+ORDER BY count(*) DESC;
 
 -- Demographic data
 
@@ -42,7 +51,7 @@ WHERE s.stid IN (13, 14, 15)
  AND q.name = 'rateme-pl'
 ORDER BY s.sid, b.ord, b.part;
 
--- Time
+-- Time data
 
 \o ./data/rtask-time.csv
 
