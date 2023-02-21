@@ -108,21 +108,6 @@ get.summary = function(df,lang) {
     summary(lang)
 }
 
-# story_len %>% anova_test(len_PL ~ category)
-# summary(aov(len_PL ~ category, story_len))
-
-# get.anova = function( df, dv, iv) {
-#   df %>% select(dv = {{dv}}, iv = {{iv}}) %>% 
-#   df %>% anova_test(dv ~ iv, df)
-# }
-# 
-# sink(file = file.path(psubdir,"test.txt"), type ="output")
-# print.me("Stories in Polish", get.anova(story_len,"len_PL", "category"))
-# print.me("Stories in English", get.anova(story_len,"len_EN", "category"))
-# print.me("Stories in Norwegian", get.anova(story_len,"len_NO", "category"))
-# sink(file = NULL)
-
-
 sink(file = file.path(psubdir,"Differences - story length.txt"), type ="output")
 print.me("Stories in Polish", get.summary(story_len,"len_PL"))
 summary(aov(len_PL ~ category, story_len))
