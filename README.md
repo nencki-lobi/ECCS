@@ -27,4 +27,4 @@ psql -U grieg -d grieg --file rtask.sql
 
 ## Requirements
 
-The following R packages are required: `fields`, `htmlwidgets`, `plotly`, `rmarkdown`, `tidyverse`, `broom`.
+The following R packages are required: `broom`, `fields`, `htmlwidgets`, `plotly`, `rmarkdown`, `tidyverse`.

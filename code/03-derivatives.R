@@ -127,7 +127,7 @@ remove_outliers = function(df, variable) {
   Q1 = quantile(df[[variable]], .25, na.rm = TRUE)
   Q3 = quantile(df[[variable]], .75, na.rm = TRUE)
   IQR = IQR(df[[variable]], na.rm = TRUE)
-  outdf = subset(df, df[[variable]] > (Q1 - 1.5*IQR) & df[[variable]] < (Q3 + 1.5*IQR))
+  subset(df, df[[variable]] > (Q1 - 1.5*IQR) & df[[variable]] < (Q3 + 1.5*IQR))
 }
 
 times_cleaned = intersect(remove_outliers(times, "pres_time"), 

@@ -10,33 +10,9 @@ if (!dir.exists(psubdir)) {dir.create(psubdir)}
 
 ## Plot demographic data
 
-### Generate summary statistics and percentages
 df = transposed_demo %>%
   select(sex,age,res,edu,child,work,org,belief,concern) %>%
   mutate(across(where(is.character), as.factor))
-
-get.percent = function(title, variable) {
-  cat("\n", title, "\n", "\n")
-  counts = table(variable)
-  percent = proportions(counts)
-  out = t(rbind(counts, percent))
-  print(out)
-}
-
-sink(file = file.path(psubdir, "Demographics - summary statistics.txt"), type ="output")
-summary(df)
-sink(file = NULL)
-
-sink(file = file.path(psubdir, "Demographics - percentages.txt"))
-get.percent("Sex", df$sex)
-get.percent("Residence", df$res)
-get.percent("Education", df$edu)
-get.percent("Child", df$child)
-get.percent("Work", df$work)
-get.percent("Organization",df$org)
-get.percent("Belief", df$belief)
-get.percent("Concern",df$concern)
-sink(file = NULL)
 
 plot.fig1 = function(data, variable, name, lnames) {
   ggplot(data, aes(variable)) +
