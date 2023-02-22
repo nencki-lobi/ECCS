@@ -18,7 +18,13 @@ get.tally = function(df, gvar, val) {
     select(gvar = {{gvar}}, val = {{val}}) %>%
     group_by(gvar, val) %>%
     tally() %>%
-    spread(val, n) %>%
+    group_by(gvar) %>%
+    mutate(prop = prop.table(n)) %>%
+    pivot_wider(id_cols = "val",
+                names_from = "gvar",
+                names_sep = ".",
+                names_sort = T,
+                values_from = c("n","prop")) %>%
     print.data.frame(row.names = F)
 }
 
@@ -82,8 +88,14 @@ df = transposed_demo %>%
   mutate(across(where(is.character), as.factor))
 
 sink(file = file.path(psubdir, "Demographics - summary statistics.txt"), type ="output")
+
+cat("\n", "Descriptive statistics by study:", "\n", "\n")
+
+ldf = describe(df ~ study)
+do.call("rbind", ldf) %>% 
+  print.data.frame()
+
 print.me("Sex", get.tally(df, "study", "sex"))
-print.me("Age", tapply(df$age, df$study, summary))
 print.me("Residence", get.tally(df, "study", "res"))
 print.me("Education", get.tally(df, "study", "edu"))
 print.me("Child", get.tally(df, "study", "child"))

@@ -15,6 +15,7 @@ library('plotly')
 library('htmlwidgets')
 library('rstatix')
 library('broom')
+library('psych')
 
 set.seed(2137) # set seed for replicability
 
