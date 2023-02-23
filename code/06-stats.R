@@ -73,12 +73,16 @@ df = stories %>%
 
 sink(file = file.path(psubdir,"Differences - story length across categories.txt"), type ="output")
 print.me("Polish stories - summary statistics", summary(df$len_PL))
-print.me("Polish stories - difference in story length across categories", summary(aov(len_PL ~ category, df)))
+print.me("Polish stories - difference in story length across categories (ANOVA)", anova_test(df, len_PL ~ category))
+print.me("Polish stories - post-hoc comparisons", tukey_hsd(df, len_PL ~ category))
 print.me("English stories - summary statistics", summary(df$len_EN))
-print.me("English stories - difference in story length across categories", summary(aov(len_EN ~ category, df)))
+print.me("English stories - difference in story length across categories", anova_test(df, len_EN ~ category))
+print.me("English stories - post-hoc comparisons", tukey_hsd(df, len_EN ~ category))
 print.me("Norwegian stories - summary statistics", summary(df$len_NO))
-print.me("Norwegian stories - difference in story length across categories", summary(aov(len_NO ~ category, df)))
+print.me("Norwegian stories - difference in story length across categories (ANOVA)", anova_test(df, len_NO ~ category))
+print.me("Norwegian stories - post-hoc comparisons", tukey_hsd(df, len_NO ~ category))
 sink(file = NULL)
+
 
 # Summary statistics of demographic data
 
