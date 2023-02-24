@@ -18,7 +18,6 @@ get.tally = function(df, gvar, val) {
     select(gvar = {{gvar}}, val = {{val}}) %>%
     group_by(gvar, val) %>%
     tally() %>%
-    group_by(gvar) %>%
     mutate(prop = prop.table(n)) %>%
     pivot_wider(id_cols = "val",
                 names_from = "gvar",

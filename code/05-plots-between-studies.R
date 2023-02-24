@@ -1,14 +1,22 @@
 # Plots
 
-pdir = "./output"
-if (!dir.exists(pdir)) {dir.create(pdir)}
+odir = "./output"
+if (!dir.exists(odir)) {dir.create(odir)}
 
-psubdir = file.path(pdir, paste0(
+osubdir = file.path(odir, paste0(
   "studies-", paste(studies, collapse = "-"),
   "-required-", as.character(required)))
-if (!dir.exists(psubdir)) {dir.create(psubdir)}
+if (!dir.exists(osubdir)) {dir.create(osubdir)}
+
+fdir.create = function(name) {
+  fdir = file.path(osubdir, name)
+  if (!dir.exists(fdir)) {dir.create(fdir)}
+  fdir
+}
 
 ## Plot comparison of mean ratings between studies
+
+fdir = fdir.create("Fig 9 - Comparison of story ratings between studies")
 
 df = story_mean_ratings_study %>%
   pivot_wider(id_cols = c("ord","code","category","part"),
@@ -33,11 +41,11 @@ for (i in 0:6) {
   subdf = filter(df, part == i)
   p = plot.fig9(subdf) +
     labs(title = paste("Differences in mean ratings of stories on", tolower(labels_scales[i+1]) , "scale"))
-  ggsave(paste("Fig 9 -", part_to_scale[i+1], "- ratings by study.png"), p, path = psubdir)
+  ggsave(paste0(part_to_scale[i+1], ".png"), p, path = fdir)
 }
 
 ### Wrapped plots
 p = plot.fig9(df) +
   facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
   labs(title = "Differences in mean ratings of stories on each scale")
-ggsave("Fig 9 - Wrap - ratings by study.png", p, width = 15, height = 10, path = psubdir)
+ggsave("Fig 9 - Comparison of story ratings between studies - Facet by scale.png", p, width = 15, height = 10, path = osubdir)
