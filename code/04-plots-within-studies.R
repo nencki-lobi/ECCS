@@ -307,39 +307,31 @@ pairs(df[,labels_scales], pch = 19, cex = 1,
 
 dev.off()
 
-## Plot how climate change concern impacts mean ratings
+## Plot how climate change concern impacts story ratings
 
-fdir = fdir.create("Fig 7 - Ratings by CC concern")
-
-df = full_join(transposed_demo,participant_mean_ratings) %>%
-  mutate(concern_group = recode(concern, "1"="1", "2"="1", "3"="1", "4"="2", "5"="3")) %>%
-  mutate(across(c("part", "concern_group"), as.character)) %>%
+df = full_join(participant_score, select(transposed_demo, "sid", "concern")) %>%
+  filter(!is.na(concern)) %>%
+  mutate(concern_group = factor(recode(concern, "1"="Low", "2"="Low", "3"="Low", "4"="Medium", "5"="High"),
+                                levels = c("Low", "Medium", "High"))) %>%
   relocate(concern_group, .after = concern)
 
-plot.fig7 = function(data) {
-  ggplot(data, aes(x=part, y=mean, fill=concern_group)) + 
-    geom_boxplot() +
-    ylim(c(-1,100)) +
-    xlab("Scales") + ylab("Mean ratings") +
-    scale_x_discrete(labels = labels_scales) +
-    scale_fill_manual(name = "Climate change concern",
-                      labels = c("Low","Medium","High","In denial"),
-                      values = c("#E8EC67", "#659157", "#0A3200", "#475052")) + beauty
-}
+p = ggplot(df, aes(x=study, y=score, fill=concern)) + 
+  geom_boxplot() +
+  xlab("Study") + ylab("Summary score") + 
+  scale_x_discrete(labels = c("Study 1", "Study 2")) +
+  scale_fill_brewer(name = "Concern level",
+                    palette = "Greys") +
+  labs(title = "Impact of climate change concern on story ratings") + beauty
+ggsave("Fig 7a - Ratings by CC concern.png", p, path = osubdir)
 
-### Separate plots
-for (i in 1:6) {
-  subdf = filter(df, category == labels_categories[i])
-  p = plot.fig7(subdf) +
-    labs(title = paste("Impact of climate change concern on ratings for", labels_categories[i], "stories"))
-  ggsave(paste0(labels_categories[i], ".png"), p, path = fdir)
-}
-
-### Wrapped plots 
-p = plot.fig7(df) +
-  facet_wrap(~category, ncol = 3) +
-  labs(title = "Impact of climate change concern on ratings for each story type")
-ggsave("Fig 7 - Ratings by CC concern.png - Facet by category.png",p , width = 15, height = 10, path = osubdir)
+p = ggplot(df, aes(x=study, y=score, fill=concern_group)) + 
+  geom_boxplot() +
+  xlab("Study") + ylab("Summary score") + 
+  scale_x_discrete(labels = c("Study 1", "Study 2")) +
+  scale_fill_brewer(name = "Concern level",
+                    palette = "Greys")  +
+  labs(title = "Impact of climate change concern on story ratings") + beauty
+ggsave("Fig 7b - Ratings by CC concern.png", p, path = osubdir)
 
 ## Plot comparison of mean ratings in male and female samples
 
