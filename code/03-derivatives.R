@@ -119,7 +119,21 @@ participant_mean_ratings = ratings %>%
   relocate("code", "sid", "stid", "study", "category", "part") %>%
   ungroup()
 
-# Mean response and evaluation times
+# For each participant calculate summary score (based on all rating scales taken together)
+
+participant_score = participant_mean_ratings %>%
+  select("sid", "code", "study", "category", "part", "mean") %>%
+  mutate(scale = factor(part_to_scale[as.character(part)], levels = labels_scales)) %>%
+  pivot_wider(id_cols = c("sid", "code", "study", "category"),
+              names_from = c("scale"), values_from = "mean") %>%
+  group_by(sid, code, study) %>%
+  summarise_at(labels_scales, mean, na.rm = TRUE) %>% 
+  mutate(Valence = abs(Valence-50)) %>%
+  mutate(score = rowSums(across(labels_scales)))
+
+participant_score[,"score"] = rescale(participant_score$score, to=c(0,1))
+
+# Mean presentation and evaluation times
 
 ## Remove outliers
 

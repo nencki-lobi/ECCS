@@ -16,6 +16,7 @@ library('htmlwidgets')
 library('rstatix')
 library('broom')
 library('psych')
+library("scales")
 
 set.seed(2137) # set seed for replicability
 
