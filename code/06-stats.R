@@ -50,6 +50,18 @@ get.correlations = function(df, gvar, val1, val2) {
     print.data.frame(row.names = F)
 }
 
+get.anova.with.posthocs = function(df, dv, iv) {
+  
+  formula = reformulate(response = dv, 
+                        termlabels = iv)
+  
+  df %>% anova_test(formula) %>%
+    print.data.frame(row.names = F)
+  
+  df %>% tukey_hsd(formula) %>%
+    print.data.frame(row.names = F)
+}
+
 check.normality = function(df, gvar, val) {
   df %>% 
     select(gvar = {{gvar}}, val = {{val}}) %>% 
@@ -71,15 +83,19 @@ df = stories %>%
   mutate(len_PL = nchar(PL), len_EN = nchar(EN), len_NO = nchar(NO))
 
 sink(file = file.path(psubdir,"Differences - story length across categories.txt"), type ="output")
+
 print.me("Polish stories - summary statistics", summary(df$len_PL))
-print.me("Polish stories - difference in story length across categories (ANOVA)", anova_test(df, len_PL ~ category))
-print.me("Polish stories - post-hoc comparisons", tukey_hsd(df, len_PL ~ category))
+print.me("Polish stories - difference in story length across categories (ANOVA & Tukey post-hocs)", 
+         get.anova.with.posthocs(df, "len_PL", "category"))
+
 print.me("English stories - summary statistics", summary(df$len_EN))
-print.me("English stories - difference in story length across categories", anova_test(df, len_EN ~ category))
-print.me("English stories - post-hoc comparisons", tukey_hsd(df, len_EN ~ category))
+print.me("English stories - difference in story length across categories (ANOVA & Tukey post-hocs)", 
+         get.anova.with.posthocs(df, "len_EN", "category"))
+
 print.me("Norwegian stories - summary statistics", summary(df$len_NO))
-print.me("Norwegian stories - difference in story length across categories (ANOVA)", anova_test(df, len_NO ~ category))
-print.me("Norwegian stories - post-hoc comparisons", tukey_hsd(df, len_NO ~ category))
+print.me("Norwegian stories - difference in story length across categories (ANOVA & Tukey post-hocs)", 
+         get.anova.with.posthocs(df, "len_NO", "category"))
+
 sink(file = NULL)
 
 
