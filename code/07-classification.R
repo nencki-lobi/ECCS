@@ -313,6 +313,14 @@ colnames(results) = c("ord", "code", "category", "class",
                  paste("M", labels_scales, sep = "."),
                  paste("D", c(labels_categories, "MID"), sep = "."))
 
+results_sliced = results %>%
+  filter(class != "unclassified") %>%
+  group_by(class) %>%
+  slice_max(D.MID, n = k) 
+
+results_diff = setdiff(results, results_sliced) %>% 
+  mutate(class = "unclassified")
+
 ## How to use:
 # results %>% filter(class == category)
 # results %>% filter(class == category & category == "NEU")
@@ -320,6 +328,7 @@ colnames(results) = c("ord", "code", "category", "class",
 # results %>% filter(class != category & category == "NEU") %>% group_by(class) %>% summarise(n = n())
 
 write.csv(results, file = file.path(osubdir, "classification-results.csv"))
+write.csv(results_sliced, file = file.path(osubdir, "classification-results_sliced.csv"))
 
 save(best_stories, worst_stories, genetic, results, 
      file = file.path(osubdir, "classification-results.RData"))
@@ -329,7 +338,7 @@ save(best_stories, worst_stories, genetic, results,
 labels = c("unclassified", l)
 colors = colors_classes[labels]
 
-df = results %>%
+df = rbind(results_sliced, results_diff) %>%
   select("ord", "category", "class", starts_with("M.")) %>%
   mutate(class = factor(class, levels = labels)) %>%
   arrange(class)
