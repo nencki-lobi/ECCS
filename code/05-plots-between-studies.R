@@ -26,7 +26,7 @@ df = story_mean_ratings_study %>%
               values_from = c("mean","n"))
 
 plot.fig9 = function(data) {
-  ggplot(data, aes(mean.1, mean.2, label = code, colour=factor(category))) +
+  ggplot(data, aes(mean.1, mean.2, label = code, colour=category)) +
     geom_point() +
     xlim(c(-1,100)) + ylim(c(-1,100)) +
     xlab("Mean ratings in Study 1 in Poland (convenience sampling)") + ylab("Mean ratings in Study 2 in Poland (purposive sampling)") +

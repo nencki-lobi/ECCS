@@ -102,7 +102,7 @@ fdir = fdir.create("Fig 2 - Story ratings")
 df = story_mean_ratings
   
 plot.fig2 = function(data) {
-  ggplot(data, aes(x=ord, y=mean, colour=factor(category))) + 
+  ggplot(data, aes(x=ord, y=mean, colour=category)) + 
     geom_point() +
     xlim(c(-1,180)) + ylim(c(-1,100)) +
     xlab("Story number") + ylab("Mean ratings") +
@@ -130,7 +130,7 @@ fdir = fdir.create("Fig 3 - Category ratings")
 df = story_mean_ratings
 
 plot.fig3 = function(data) {
-  ggplot(data, aes(x=category, y=mean, fill=factor(category))) + 
+  ggplot(data, aes(x=category, y=mean, fill=category)) + 
     geom_boxplot() +
     ylim(c(-1,100)) +
     xlab("Story type") + ylab("Mean ratings") +
@@ -256,7 +256,7 @@ for(i in 1:6) {
 }
 
 ### Single plot
-p = ggplot(df, aes(x=valence, y=arousal, colour=factor(category)))+
+p = ggplot(df, aes(x=valence, y=arousal, colour=category))+
   geom_point() +
   xlim(c(-1,100)) + ylim(c(-1,100)) +
   xlab("Valence") + ylab("Arousal") +
@@ -276,7 +276,7 @@ df = story_mean_ratings_study %>%
 
 colnames(df) = c("ord","category", "study", "valence","arousal")
 
-p = ggplot(df, aes(x=valence, y=arousal, colour=factor(category)))+
+p = ggplot(df, aes(x=valence, y=arousal, colour=category))+
   geom_point() +
   xlim(c(-1,100)) + ylim(c(-1,100)) +
   xlab("Valence") + ylab("Arousal") +
@@ -343,7 +343,7 @@ df = full_join(story_mean_ratings_M, story_mean_ratings_F,
   select("ord","code","category","part","mean.m","mean.w")
 
 plot.fig8 = function(data) {
-  ggplot(data, aes(x = mean.m, y = mean.w, label = code, colour=factor(category))) +
+  ggplot(data, aes(x = mean.m, y = mean.w, label = code, colour=category)) +
     geom_point() +
     xlim(c(-1,100)) + ylim(c(-1,100)) +
     xlab("Mean ratings in male sample") + ylab("Mean ratings in female sample") +
