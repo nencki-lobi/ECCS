@@ -18,9 +18,7 @@ fdir.create = function(name) {
 
 fdir = fdir.create("Fig 1 - Demographics")
 
-df = transposed_demo %>%
-  select(sex,age,res,edu,child,work,org,belief,concern) %>%
-  mutate(across(where(is.character), as.factor))
+df = transposed_demo
 
 plot.fig1 = function(data, variable, name, lnames) {
   ggplot(data, aes(variable)) +
@@ -51,7 +49,7 @@ ggsave(paste0(name, ".png"), p, path = fdir)
 
 ### Education
 name = "Education"
-lnames = c("Primary", "Vocational", "Secondary", "Undergraduate", "Graduate", "Doctoral")
+lnames = c("Primary", "Gymnasium", "Vocational", "Secondary", "Undergraduate", "Graduate", "Doctoral")
 p = plot.fig1(df, df$edu, name, lnames)
 ggsave(paste0(name, ".png"), p, path = fdir)
 
@@ -85,13 +83,11 @@ ggsave(paste0(name, ".png"), p, path = fdir)
 
 ### Concern about climate change
 name = "Concern about climate change"
-lnames = c("Not concerned",
-           "Barely concerned",
-           "Somewhat concerned",
-           "Very concerned",
-           "Extremely concerned",
+lnames = c("Low",
+           "Middle",
+           "High",
            "Denies climate change")
-p = plot.fig1(df, df$concern, name, lnames) +
+p = plot.fig1(df, df$concern_group, name, lnames) +
   scale_x_discrete(labels = str_wrap(lnames, width = 10))
 ggsave(paste0(name, ".png"), p, path = fdir)
 
@@ -168,8 +164,7 @@ ggsave("Fig 3b - Category ratings - Facet by scale.png", p, width = 10, height =
 ### Grid plot
 
 df = story_mean_ratings_study %>% 
-  mutate(part  = factor(part,  labels = labels_scales),
-         study = factor(study, labels = c("Study 1", "Study 2")))
+  mutate(part  = factor(part,  labels = labels_scales))
 
 p = df %>% plot.fig3 +
   facet_grid(part ~ study) + 
@@ -266,8 +261,7 @@ ggsave("Fig 5 - Correlation between valence & arousal.png", p, path = osubdir)
 
 ### Grid plot
 
-df = story_mean_ratings_study %>% 
-  mutate(study = factor(study, labels = c("Study 1", "Study 2"))) %>%
+df = story_mean_ratings_study %>%
   filter(part =="0" | part =="1") %>%
   pivot_wider(id_cols = c("ord", "category", "study"),
               names_from = part,
@@ -309,11 +303,8 @@ dev.off()
 
 ## Plot how climate change concern impacts story ratings
 
-df = full_join(participant_score, select(transposed_demo, "sid", "concern")) %>%
-  filter(!is.na(concern)) %>%
-  mutate(concern_group = factor(recode(concern, "1"="Low", "2"="Low", "3"="Low", "4"="Medium", "5"="High"),
-                                levels = c("Low", "Medium", "High"))) %>%
-  relocate(concern_group, .after = concern)
+df = full_join(participant_score, select(transposed_demo, "sid", "concern", "concern_group")) %>%
+  filter(!is.na(concern))
 
 p = ggplot(df, aes(x=study, y=score, fill=concern)) + 
   geom_boxplot() +

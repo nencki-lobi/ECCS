@@ -14,22 +14,37 @@ transposed_ratings = ratings %>%
               names_sort = T,
               values_from = "opt")
 
+lookup = c(sex = "demo-1-pl.0", 
+           sex_other = "demo-1-pl.1",
+           birth = "demo-1-pl.2",
+           res = "demo-1-pl.3",
+           edu = "demo-1-pl.4",
+           edu_other = "demo-1-pl.5",
+           child = "demo-1-pl.6",
+           work = "demo-1-pl.7",
+           org = "demo-1-pl.8",
+           belief = "demo-1-pl.9",
+           concern = "demo-1-pl.10")
+
 transposed_demo = demo %>%
   pivot_wider(id_cols = c("sid", "code", "stid"),
               names_from = c("name", "ord"),
               names_sep = ".",
-              values_from = "val")
-
-transposed_demo = filter(transposed_demo, sid %in% transposed_ratings$sid)
-colnames(transposed_demo) = c("sid","code","stid","sex","year","res","edu","child","work","org","belief","concern","sex_other","edu_other")
+              values_from = "val") %>%
+  rename(any_of(lookup)) %>%
+  select(-contains("_other")) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
+                        levels = c("Study 1", "Study 2")), .after = stid) %>%
+  mutate(across(c(birth), as.numeric)) %>%
+  mutate(across(c(where(is.character), -sid, -code, -stid), as.factor)) %>%
+  filter(sid %in% transposed_ratings$sid)
 
 # Create extra variables for later use
 
-current_year = 2022
-
-transposed_demo = mutate(transposed_demo, age = current_year - as.numeric(year)) %>%
-  relocate(age, .after = year) %>%
-  filter(age>17)
+transposed_demo = transposed_demo %>%
+  mutate(age = case_when(stid %in% c("13","14","15") ~ 2022 - birth), .after = birth) %>%
+  mutate(concern_group = factor(recode(concern, "1"="Low", "2"="Low", "3"="Low", "4"="Medium", "5"="High"),
+                                levels = c("Low", "Medium", "High")), .after = concern)
 
 # For each story calculate mean ratings on each of the scales
 
@@ -79,7 +94,8 @@ story_mean_ratings_F = ratings_F %>%
 ## Different studies
 
 story_mean_ratings_study = ratings %>%
-  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
+                        levels = c("Study 1", "Study 2")), .after = stid) %>%
   group_by(ord, part, study) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
@@ -115,7 +131,8 @@ participant_mean_ratings = ratings %>%
   mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   group_by(code, sid, stid, category, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
-  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
+                        levels = c("Study 1", "Study 2")), .after = stid) %>%
   relocate("code", "sid", "stid", "study", "category", "part") %>%
   ungroup()
 
@@ -150,7 +167,8 @@ times_to_say_goodbye = setdiff(remove_outliers(times, "pres_time"),
                                remove_outliers(times, "eval_time"))
 
 mean_times = times_cleaned %>%
-  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
+                        levels = c("Study 1", "Study 2")), .after = stid) %>%
   group_by(study, ord) %>%
   summarise(mean_pres = mean(pres_time), mean_eval = mean(eval_time), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%

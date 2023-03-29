@@ -26,13 +26,13 @@ df = story_mean_ratings_study %>%
               values_from = c("mean","n"))
 
 plot.fig9 = function(data) {
-  ggplot(data, aes(mean.1, mean.2, label = code, colour=category)) +
+  ggplot(data, aes(`mean.Study 1`, `mean.Study 2`, label = code, colour=category)) +
     geom_point() +
     xlim(c(-1,100)) + ylim(c(-1,100)) +
     xlab("Mean ratings in Study 1 in Poland (convenience sampling)") + ylab("Mean ratings in Study 2 in Poland (purposive sampling)") +
     scale_color_manual(values = colors_categories, name = "Story type") +
     geom_abline(aes(intercept = 0, slope = 1)) +
-    geom_label(data = subset(data, abs(mean.1 - mean.2) > 25), show.legend = FALSE) +
+    geom_label(data = subset(data, abs(`mean.Study 1` - `mean.Study 2`) > 25), show.legend = FALSE) +
     beauty
 }
 

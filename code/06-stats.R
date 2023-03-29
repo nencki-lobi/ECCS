@@ -102,9 +102,7 @@ sink(file = NULL)
 # Summary statistics of demographic data
 
 df = transposed_demo %>%
-  mutate(study = recode(stid, "13"="1", "14"="1", "15"="2")) %>%
-  select(study, sex, age, res, edu, child, work, org, belief, concern) %>%
-  mutate(across(where(is.character), as.factor))
+  select(-c("sid", "code", "stid", "birth"))
 
 sink(file = file.path(psubdir, "Demographics - summary statistics.txt"), type ="output")
 
@@ -122,14 +120,13 @@ print.me("Work", get.tally(df, "study", "work"))
 print.me("Organization", get.tally(df, "study", "org"))
 print.me("Belief", get.tally(df, "study", "belief"))
 print.me("Concern", get.tally(df, "study", "concern"))
+print.me("Concern group", get.tally(df, "study", "concern_group"))
 sink(file = NULL)
 
 # Difference in mean ratings across concern groups
 
-df = full_join(transposed_demo,participant_mean_ratings) %>%
-  mutate(concern_group = recode(concern, "1"="1", "2"="1", "3"="1", "4"="2", "5"="3")) %>%
-  mutate(across(c("part", "concern_group"), as.character)) %>%
-  relocate(concern_group, .after = concern)
+df = full_join(transposed_demo, participant_mean_ratings) %>%
+  mutate(across(c("part"), as.factor))
 
 sink(file = file.path(psubdir,"Differences - mean ratings across concern groups.txt"), type ="output")
 print.me("Difference in mean ratings across concern groups",
@@ -149,9 +146,9 @@ df = story_mean_ratings_study %>%
   mutate(scale = factor(part_to_scale[as.character(part)], levels = labels_scales))
 
 sink(file = file.path(psubdir,"Correlations - mean ratings between studies.txt"), type = "output")
-print.me("Shapiro-Wilk normality of ratings distribution - Study 1", check.normality(df,"scale","mean.1"))
-print.me("Shapiro-Wilk normality of ratings distribution - Study 2", check.normality(df,"scale","mean.2"))
-print.me("Correlations of mean ratings on each of the scales between studies", get.correlations(df,"scale","mean.1","mean.2"))
+print.me("Shapiro-Wilk normality of ratings distribution - Study 1", check.normality(df,"scale","mean.Study 1"))
+print.me("Shapiro-Wilk normality of ratings distribution - Study 2", check.normality(df,"scale","mean.Study 2"))
+print.me("Correlations of mean ratings on each of the scales between studies", get.correlations(df,"scale","mean.Study 1","mean.Study 2"))
 sink(file = NULL)
 
 # Correlations of times between studies
@@ -167,6 +164,6 @@ sink(file = file.path(psubdir,"Correlations - mean times between studies.txt"), 
 print.me("Summary statistics (means)", get.means(mean_times, "study", "mean_pres", "mean_eval", "n"))
 print.me("Shapiro-Wilk normality of presentation time distribution", check.normality(mean_times,"study","mean_pres"))
 print.me("Shapiro-Wilk normality of evaluation time distribution", check.normality(mean_times,"study","mean_eval"))
-print.me("Correlations of presentation times between studies", get.correlations(df,"category","mean_pres.1","mean_pres.2"))
-print.me("Correlations of evaluation times between studies", get.correlations(df,"category","mean_eval.1","mean_eval.2"))
+print.me("Correlations of presentation times between studies", get.correlations(df,"category","mean_pres.Study 1","mean_pres.Study 2"))
+print.me("Correlations of evaluation times between studies", get.correlations(df,"category","mean_eval.Study 1","mean_eval.Study 2"))
 sink(file = NULL)
