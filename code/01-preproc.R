@@ -6,8 +6,11 @@ colnames(items) = c("PL", "EN", "NO", "code")
 subjects = read.table("./data/rtask-subject.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
 colnames(subjects) = c("sid", "code", "stid")
 
-external = read.table("./data/rtask-subject-external.csv", header = F, sep = "", strip.white = T, encoding = "UTF-8")
-colnames(external) = c("sid")
+external.pl = read.table("./data/rtask-subject-external-pl.csv", header = F, sep = "", strip.white = T, encoding = "UTF-8")
+colnames(external.pl) = c("sid")
+
+external.no = read.table("./data/rtask-subject-external-no.csv", header = F, sep = "", strip.white = T, encoding = "UTF-8")
+colnames(external.no) = c("sid")
 
 ranking = read.table("./data/rtask-subject-ranking.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")
 colnames(ranking) = c("sid", "code", "stid", "rank")
@@ -35,25 +38,31 @@ times = filter(times, stid %in% studies)
 
 ## For participants recruited by the company, keep those who passed quality check
 
-if (15 %in% studies) {
-  subjects = subjects %>% 
-    filter((stid == 13) | 
-           (stid == 14) | 
-           (stid == 15 & sid %in% external$sid))
-}
+external = bind_rows(list("15" = external.pl, "17" = external.no), .id = 'stid')
+
+subjects = subjects %>%
+  filter(stid == 13 | 
+         stid == 14 |
+         stid == 15 & sid %in% external$sid |
+         stid == 17 & sid %in% external$sid)
 
 ## Find participants with required number of stories rated
 
 required = params$required
-list1 = filter(ranking, rank >= required)$sid
+list1 = ranking %>% 
+  filter(rank >= required) %>%
+  select(stid, sid)
 
 ## Find adult participants
 
-list2 = filter(demo, ord == 2 & as.numeric(val) < 2005)$sid
+list2 = demo %>% 
+  filter((stid == 13 | stid == 14 | stid == 15) & ord == 2 & as.numeric(val) < 2005 |
+          stid == 17 & ord == 2 & as.numeric(val) < 2006) %>%
+  select(stid, sid)
 
 ## Final list of subjects
 
-subjects = subjects %>% filter(sid %in% intersect(list1, list2))
+subjects = subjects %>% filter(sid %in% intersect(list1$sid, list2$sid))
 # subjects %>% group_by(stid) %>% summarise(n=n())
 
 # Clean data
@@ -61,3 +70,9 @@ subjects = subjects %>% filter(sid %in% intersect(list1, list2))
 demo = filter(demo, sid %in% subjects$sid)
 ratings = filter(ratings, sid %in% subjects$sid)
 times = filter(times, sid %in% subjects$sid)
+
+# Rename questionnaires for easier processing of data from both countries
+
+demo = demo %>% mutate(name = recode(name, "demo-1-pl" = "demo", "demo-1-no" = "demo"))
+ratings = ratings %>% mutate(name = recode(name, "rateme-pl" = "rateme", "rateme-no" = "rateme"))
+times = times %>% mutate(name = recode(name, "rateme-pl" = "rateme", "rateme-no" = "rateme"))

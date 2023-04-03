@@ -14,17 +14,17 @@ transposed_ratings = ratings %>%
               names_sort = T,
               values_from = "opt")
 
-lookup = c(sex = "demo-1-pl.0", 
-           sex_other = "demo-1-pl.1",
-           birth = "demo-1-pl.2",
-           res = "demo-1-pl.3",
-           edu = "demo-1-pl.4",
-           edu_other = "demo-1-pl.5",
-           child = "demo-1-pl.6",
-           work = "demo-1-pl.7",
-           org = "demo-1-pl.8",
-           belief = "demo-1-pl.9",
-           concern = "demo-1-pl.10")
+lookup = c(sex = "demo.0", 
+           sex_other = "demo.1",
+           birth = "demo.2",
+           res = "demo.3",
+           edu = "demo.4",
+           edu_other = "demo.5",
+           child = "demo.6",
+           work = "demo.7",
+           org = "demo.8",
+           belief = "demo.9",
+           concern = "demo.10")
 
 transposed_demo = demo %>%
   pivot_wider(id_cols = c("sid", "code", "stid"),
@@ -33,8 +33,8 @@ transposed_demo = demo %>%
               values_from = "val") %>%
   rename(any_of(lookup)) %>%
   select(-contains("_other")) %>%
-  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
-                        levels = c("Study 1", "Study 2")), .after = stid) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
+                        levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   mutate(across(c(birth), as.numeric)) %>%
   mutate(across(c(where(is.character), -sid, -code, -stid), as.factor)) %>%
   filter(sid %in% transposed_ratings$sid)
@@ -42,7 +42,38 @@ transposed_demo = demo %>%
 # Create extra variables for later use
 
 transposed_demo = transposed_demo %>%
-  mutate(age = case_when(stid %in% c("13","14","15") ~ 2022 - birth), .after = birth) %>%
+  mutate(age = case_when(stid %in% c("13","14","15") ~ 2022 - birth,
+                         stid %in% c("17") ~ 2023 - birth), .after = birth) %>%
+  mutate(res_group = case_when(
+    stid %in% c("13","14","15") ~ recode(res, 
+        "0"="Rural",
+        "1"="Urban <50K",
+        "2"="Urban 50-100K",
+        "3"="Urban >100K",
+        "4"="Urban >100K"),
+    stid %in% c("17") ~ recode(res, 
+        "0"="Rural",
+        "1"="Urban <50K",
+        "2"="Urban <50K",
+        "3"="Urban 50-100K",
+        "4"="Urban >100K")), .after = res) %>%
+  mutate(edu_group = case_when(
+    stid %in% c("13","14","15") ~ recode(edu, 
+        "0"="Primary",
+        "1"="Primary",
+        "2"="Primary",
+        "3"="Secondary",
+        "4"="Secondary",
+        "5"="Higher",
+        "6"="Higher",
+        "7"="Higher",
+        "8"="Other"),
+    stid %in% c("17") ~ recode(edu, 
+        "0"="Primary",
+        "1"="Secondary",
+        "2"="Secondary",
+        "3"="Higher",
+        "4"="Other")), .after = edu) %>%
   mutate(concern_group = factor(recode(concern, "1"="Low", "2"="Low", "3"="Low", "4"="Medium", "5"="High"),
                                 levels = c("Low", "Medium", "High")), .after = concern)
 
@@ -94,8 +125,8 @@ story_mean_ratings_F = ratings_F %>%
 ## Different studies
 
 story_mean_ratings_study = ratings %>%
-  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
-                        levels = c("Study 1", "Study 2")), .after = stid) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
+                        levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   group_by(ord, part, study) %>%
   summarise(mean = mean(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
@@ -131,8 +162,8 @@ participant_mean_ratings = ratings %>%
   mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   group_by(code, sid, stid, category, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
-  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
-                        levels = c("Study 1", "Study 2")), .after = stid) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
+                        levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   relocate("code", "sid", "stid", "study", "category", "part") %>%
   ungroup()
 
@@ -167,8 +198,8 @@ times_to_say_goodbye = setdiff(remove_outliers(times, "pres_time"),
                                remove_outliers(times, "eval_time"))
 
 mean_times = times_cleaned %>%
-  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2"),
-                        levels = c("Study 1", "Study 2")), .after = stid) %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
+                        levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   group_by(study, ord) %>%
   summarise(mean_pres = mean(pres_time), mean_eval = mean(eval_time), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%

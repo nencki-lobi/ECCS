@@ -25,7 +25,7 @@ df = story_mean_ratings_study %>%
               names_sort = T,
               values_from = c("mean","n"))
 
-plot.fig9 = function(data) {
+plot.fig9a = function(data) {
   ggplot(data, aes(`mean.Study 1`, `mean.Study 2`, label = code, colour=category)) +
     geom_point() +
     xlim(c(-1,100)) + ylim(c(-1,100)) +
@@ -36,16 +36,39 @@ plot.fig9 = function(data) {
     beauty
 }
 
+plot.fig9b = function(data) {
+  ggplot(data, aes(`mean.Study 2`, `mean.Study 3`, label = code, colour=category)) +
+    geom_point() +
+    xlim(c(-1,100)) + ylim(c(-1,100)) +
+    xlab("Mean ratings in Study 2 in Poland (purposive sampling)") + ylab("Mean ratings in Study 3 in Norway (purposive sampling)") +
+    scale_color_manual(values = colors_categories, name = "Story type") +
+    geom_abline(aes(intercept = 0, slope = 1)) +
+    geom_label(data = subset(data, abs(`mean.Study 2` - `mean.Study 3`) > 25), show.legend = FALSE) +
+    beauty
+}
+
 ### Separate plots
 for (i in 0:6) {
   subdf = filter(df, part == i)
-  p = plot.fig9(subdf) +
+  p = plot.fig9a(subdf) +
     labs(title = paste("Differences in mean ratings of stories on", tolower(labels_scales[i+1]) , "scale"))
-  ggsave(paste0(part_to_scale[i+1], ".png"), p, path = fdir)
+  ggsave(paste0("Study 1 vs Study 2 - ",part_to_scale[i+1], ".png"), p, path = fdir)
+}
+
+for (i in 0:6) {
+  subdf = filter(df, part == i)
+  p = plot.fig9b(subdf) +
+    labs(title = paste("Differences in mean ratings of stories on", tolower(labels_scales[i+1]) , "scale"))
+  ggsave(paste0("Study 2 vs Study 3 - ",part_to_scale[i+1], ".png"), p, path = fdir)
 }
 
 ### Wrapped plots
-p = plot.fig9(df) +
+p = plot.fig9a(df) +
   facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
   labs(title = "Differences in mean ratings of stories on each scale")
-ggsave("Fig 9 - Comparison of story ratings between studies - Facet by scale.png", p, width = 15, height = 10, path = osubdir)
+ggsave("Fig 9a - Comparison of story ratings between Study 1 and Study 2 - Facet by scale.png", p, width = 15, height = 10, path = osubdir)
+
+p = plot.fig9b(df) +
+  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
+  labs(title = "Differences in mean ratings of stories on each scale")
+ggsave("Fig 9b - Comparison of story ratings between Study 2 and Study 3 - Facet by scale.png", p, width = 15, height = 10, path = osubdir)

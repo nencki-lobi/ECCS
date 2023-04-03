@@ -2,7 +2,7 @@
 title: "Emotional Climate Change Stories (ECCS)"
 output: html_document
 params:
-  studies: c(13,14,15)
+  studies: c(13,14,15,17)
   required: 10
   l: ANG,COM,HOP,NEU
   k: 9
@@ -24,8 +24,11 @@ source('./code/01-preproc.R', local = knitr::knit_global())
 source('./code/02-helpers.R', local = knitr::knit_global())
 source('./code/03-derivatives.R', local = knitr::knit_global())
 source('./code/04-plots-within-studies.R', local = knitr::knit_global())
-if (params$studies == "c(13,14,15)") {
+if (params$studies == "c(13,14,15,17)") {
   source('./code/05-plots-between-studies.R', local = knitr::knit_global())
-  source('./code/06-stats.R', local = knitr::knit_global())}
-source('./code/07-classification.R', local = knitr::knit_global())
+  source('./code/06-stats.R', local = knitr::knit_global())
+  }
+if (params$studies == "c(13,14,15)") {
+  source('./code/07-classification.R', local = knitr::knit_global())
+  }
 ```

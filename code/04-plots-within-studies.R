@@ -31,45 +31,52 @@ plot.fig1 = function(data, variable, name, lnames) {
 ### Gender
 name = "Gender"
 lnames = c("Female", "Male", "Other")
-p = plot.fig1(df, df$sex, name, lnames)
-ggsave(paste0(name, ".png"), p, path = fdir)
+p = plot.fig1(df, df$sex, name, lnames) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Age
 name = "Age"
 lnames = NULL
-p = plot.fig1(df, df$age, name, lnames)
-ggsave(paste0(name, ".png"), p, path = fdir)
+p = plot.fig1(df, df$age, name, lnames) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Place of residence
 name = "Place of residence"
-lnames = c("Rural", "Urban <50k", "Urban 50-100k", "Urban 100-500k", "Urban >500k")
-p = plot.fig1(df, df$res, name, lnames) +
-  scale_x_discrete(labels = str_wrap(lnames, width = 10))
-ggsave(paste0(name, ".png"), p, path = fdir)
+lnames = c("Rural", "Urban <50K", "Urban 50-100K", "Urban >100K")
+p = plot.fig1(df, df$res_group, name, lnames) +
+  scale_x_discrete(labels = str_wrap(lnames, width = 10)) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Education
 name = "Education"
-lnames = c("Primary", "Gymnasium", "Vocational", "Secondary", "Undergraduate", "Graduate", "Doctoral")
-p = plot.fig1(df, df$edu, name, lnames)
-ggsave(paste0(name, ".png"), p, path = fdir)
+lnames = c("Primary", "Secondary", "Higher", "Other")
+p = plot.fig1(df, df$edu_group, name, lnames) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Parenthood status
 name = "Parenthood status"
 lnames = c("Yes", "No")
-p = plot.fig1(df, df$child, name, lnames)
-ggsave(paste0(name, ".png"), p, path = fdir)
+p = plot.fig1(df, df$child, name, lnames) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Occupation related to climate change
 name = "Occupation related to climate change"
 lnames = c("Yes", "No")
-p = plot.fig1(df, df$work, name, lnames)
-ggsave(paste0(name, ".png"), p, path = fdir)
+p = plot.fig1(df, df$work, name, lnames) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Activism related to climate change
 name = "Activism related to climate change"
 lnames = c("Yes", "No")
-p = plot.fig1(df, df$org, name, lnames)
-ggsave(paste0(name, ".png"), p, path = fdir)
+p = plot.fig1(df, df$org, name, lnames) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Belief in climate change
 name = "Belief in climate change"
@@ -78,8 +85,9 @@ lnames = c("Strongly believes",
            "Rather does not believe",
            "Strongly does not believe")
 p = plot.fig1(df, df$belief, name, lnames) +
-  scale_x_discrete(labels = str_wrap(lnames, width = 10))
-ggsave(paste0(name, ".png"), p, path = fdir)
+  scale_x_discrete(labels = str_wrap(lnames, width = 10)) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ### Concern about climate change
 name = "Concern about climate change"
@@ -88,8 +96,9 @@ lnames = c("Low",
            "High",
            "Denies climate change")
 p = plot.fig1(df, df$concern_group, name, lnames) +
-  scale_x_discrete(labels = str_wrap(lnames, width = 10))
-ggsave(paste0(name, ".png"), p, path = fdir)
+  scale_x_discrete(labels = str_wrap(lnames, width = 10)) + 
+  facet_wrap(~study, ncol = 3)
+ggsave(paste0(name, ".png"), p, width = 8, height = 3, path = fdir)
 
 ## Plot mean ratings for each story with stories ordered by number (ord)
 
@@ -229,7 +238,7 @@ df = story_mean_ratings %>%
                 names_sep = ".",
                 values_from = "mean")
 
-colnames(df) = c("ord","category","valence","arousal")
+colnames(df) = c("ord", "category", "valence", "arousal")
 
 plot.fig5 = function(data){
   ggplot(data, aes(x=valence, y=arousal, colour=factor(group))) +
@@ -268,7 +277,7 @@ df = story_mean_ratings_study %>%
               names_sep = ".",
               values_from = "mean")
 
-colnames(df) = c("ord","category", "study", "valence","arousal")
+colnames(df) = c("ord", "category", "study", "valence", "arousal")
 
 p = ggplot(df, aes(x=valence, y=arousal, colour=category))+
   geom_point() +
@@ -277,7 +286,7 @@ p = ggplot(df, aes(x=valence, y=arousal, colour=category))+
   scale_color_manual(values = colors_categories, name = "Story type") +
   facet_wrap(~study, ncol = 3) +
   labs(title = "Mean valence and arousal for each story type") + beauty
-ggsave("Fig 5 - Correlation between valence & arousal - Facet by study.png", p, path = osubdir)
+ggsave("Fig 5 - Correlation between valence & arousal - Facet by study.png", p, width = 8, height = 3, path = osubdir)
 
 ## Create a martix of scatterplots to inspect relationships between rating scales
 
@@ -308,8 +317,7 @@ df = full_join(participant_score, select(transposed_demo, "sid", "concern", "con
 
 p = ggplot(df, aes(x=study, y=score, fill=concern)) + 
   geom_boxplot() +
-  xlab("Study") + ylab("Summary score") + 
-  scale_x_discrete(labels = c("Study 1", "Study 2")) +
+  xlab("Study") + ylab("Summary score") +
   scale_fill_brewer(name = "Concern level",
                     palette = "Greys") +
   labs(title = "Impact of climate change concern on story ratings") + beauty
@@ -317,8 +325,7 @@ ggsave("Fig 7a - Ratings by CC concern.png", p, path = osubdir)
 
 p = ggplot(df, aes(x=study, y=score, fill=concern_group)) + 
   geom_boxplot() +
-  xlab("Study") + ylab("Summary score") + 
-  scale_x_discrete(labels = c("Study 1", "Study 2")) +
+  xlab("Study") + ylab("Summary score") +
   scale_fill_brewer(name = "Concern level",
                     palette = "Greys")  +
   labs(title = "Impact of climate change concern on story ratings") + beauty

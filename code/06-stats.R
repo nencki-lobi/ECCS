@@ -113,13 +113,12 @@ do.call("rbind", ldf) %>%
   print.data.frame()
 
 print.me("Sex", get.tally(df, "study", "sex"))
-print.me("Residence", get.tally(df, "study", "res"))
-print.me("Education", get.tally(df, "study", "edu"))
+print.me("Residence", get.tally(df, "study", "res_group"))
+print.me("Education", get.tally(df, "study", "edu_group"))
 print.me("Child", get.tally(df, "study", "child"))
 print.me("Work", get.tally(df, "study", "work"))
 print.me("Organization", get.tally(df, "study", "org"))
 print.me("Belief", get.tally(df, "study", "belief"))
-print.me("Concern", get.tally(df, "study", "concern"))
 print.me("Concern group", get.tally(df, "study", "concern_group"))
 sink(file = NULL)
 
@@ -148,7 +147,9 @@ df = story_mean_ratings_study %>%
 sink(file = file.path(psubdir,"Correlations - mean ratings between studies.txt"), type = "output")
 print.me("Shapiro-Wilk normality of ratings distribution - Study 1", check.normality(df,"scale","mean.Study 1"))
 print.me("Shapiro-Wilk normality of ratings distribution - Study 2", check.normality(df,"scale","mean.Study 2"))
-print.me("Correlations of mean ratings on each of the scales between studies", get.correlations(df,"scale","mean.Study 1","mean.Study 2"))
+print.me("Shapiro-Wilk normality of ratings distribution - Study 3", check.normality(df,"scale","mean.Study 3"))
+print.me("Correlations of mean ratings on each of the scales between Study 1 and Study 2", get.correlations(df,"scale","mean.Study 1","mean.Study 2"))
+print.me("Correlations of mean ratings on each of the scales between Study 2 and Study 3", get.correlations(df,"scale","mean.Study 2","mean.Study 3"))
 sink(file = NULL)
 
 # Correlations of times between studies
@@ -164,6 +165,8 @@ sink(file = file.path(psubdir,"Correlations - mean times between studies.txt"), 
 print.me("Summary statistics (means)", get.means(mean_times, "study", "mean_pres", "mean_eval", "n"))
 print.me("Shapiro-Wilk normality of presentation time distribution", check.normality(mean_times,"study","mean_pres"))
 print.me("Shapiro-Wilk normality of evaluation time distribution", check.normality(mean_times,"study","mean_eval"))
-print.me("Correlations of presentation times between studies", get.correlations(df,"category","mean_pres.Study 1","mean_pres.Study 2"))
-print.me("Correlations of evaluation times between studies", get.correlations(df,"category","mean_eval.Study 1","mean_eval.Study 2"))
+print.me("Correlations of presentation times between Study 1 and Study 2", get.correlations(df,"category","mean_pres.Study 1","mean_pres.Study 2"))
+print.me("Correlations of evaluation times between Study 1 and Study 2", get.correlations(df,"category","mean_eval.Study 1","mean_eval.Study 2"))
+print.me("Correlations of presentation times between Study 2 and Study 3", get.correlations(df,"category","mean_pres.Study 2","mean_pres.Study 3"))
+print.me("Correlations of evaluation times between Study 2 and Study 3", get.correlations(df,"category","mean_eval.Study 2","mean_eval.Study 3"))
 sink(file = NULL)
