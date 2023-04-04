@@ -174,7 +174,7 @@ participant_score = participant_mean_ratings %>%
   mutate(scale = factor(part_to_scale[as.character(part)], levels = labels_scales)) %>%
   pivot_wider(id_cols = c("sid", "code", "study", "category"),
               names_from = c("scale"), values_from = "mean") %>%
-  group_by(sid, code, study) %>%
+  group_by(sid, code, study, category) %>%
   summarise_at(labels_scales, mean, na.rm = TRUE) %>% 
   mutate(Valence = abs(Valence-50)) %>%
   mutate(score = rowSums(across(labels_scales)))

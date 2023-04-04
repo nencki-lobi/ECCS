@@ -315,20 +315,26 @@ dev.off()
 df = full_join(participant_score, select(transposed_demo, "sid", "concern", "concern_group")) %>%
   filter(!is.na(concern))
 
-p = ggplot(df, aes(x=study, y=score, fill=concern)) + 
-  geom_boxplot() +
+p = ggplot(df, aes(x=study, y=score, fill=category, alpha=concern)) +
+  geom_boxplot(outlier.alpha = 1) +
   xlab("Study") + ylab("Summary score") +
-  scale_fill_brewer(name = "Concern level",
-                    palette = "Greys") +
+  scale_fill_manual(name = "Story type", values = colors_categories) +
+  scale_alpha_manual(name = "Concern level", values = c(0.1, 0.3, 0.5, 0.7, 0.9),
+                     guide = guide_legend(override.aes = list(fill = "black")) ) +
   labs(title = "Impact of climate change concern on story ratings") + beauty
+
+p = p + facet_wrap(~category)
 ggsave("Fig 7a - Ratings by CC concern.png", p, path = osubdir)
 
-p = ggplot(df, aes(x=study, y=score, fill=concern_group)) + 
-  geom_boxplot() +
+p = ggplot(df, aes(x=study, y=score, fill=category, alpha=concern_group)) +
+  geom_boxplot(outlier.alpha = 1) +
   xlab("Study") + ylab("Summary score") +
-  scale_fill_brewer(name = "Concern level",
-                    palette = "Greys")  +
+  scale_fill_manual(name = "Story type", values = colors_categories) +
+  scale_alpha_manual(name = "Concern level", values = c(0.15, 0.5, 0.85),
+                     guide = guide_legend(override.aes = list(fill = "black")) ) +
   labs(title = "Impact of climate change concern on story ratings") + beauty
+
+p = p + facet_wrap(~category)
 ggsave("Fig 7b - Ratings by CC concern.png", p, path = osubdir)
 
 ## Plot comparison of mean ratings in male and female samples
