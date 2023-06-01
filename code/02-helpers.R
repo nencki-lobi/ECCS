@@ -4,6 +4,7 @@ ords = 0:179
 parts = 0:6
 
 labels_scales = c("Valence", "Arousal", "Anger", "Anxiety", "Compassion", "Guilt", "Hope")
+labels_emotion_scales = labels_scales[!(labels_scales %in% c('Valence','Arousal'))]
 
 labels_categories = c("ANG", "ANX", "COM", "GUI", "HOP", "NEU")
 colors_categories = c("#E05263", "#659157", "#FEAEA5", "#6C5670", "#46b7d3", "#96949B")

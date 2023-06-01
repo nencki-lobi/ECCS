@@ -162,12 +162,15 @@ participant_mean_ratings = ratings %>%
   mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   group_by(code, sid, stid, category, part) %>%
   summarise(mean = mean(opt), n = n()) %>%
+  mutate(scale = factor(part_to_scale[as.character(part)], levels = labels_scales)) %>%
   mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
                         levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   relocate("code", "sid", "stid", "study", "category", "part") %>%
   ungroup()
 
 # For each participant calculate summary score (based on all rating scales taken together)
+
+labels_emotion_scales = labels_scales[!(labels_scales %in% c('Valence','Arousal'))]
 
 participant_score = participant_mean_ratings %>%
   select("sid", "code", "study", "category", "part", "mean") %>%
@@ -177,7 +180,9 @@ participant_score = participant_mean_ratings %>%
   group_by(sid, code, study, category) %>%
   summarise_at(labels_scales, mean, na.rm = TRUE) %>% 
   mutate(Valence = abs(Valence-50)) %>%
-  mutate(score = rowSums(across(labels_scales)))
+  mutate(score = Valence * Arousal)
+#mutate(score = rowSums(across(labels_scales)))
+#mutate(score = rowSums(across(labels_emotion_scales) ** 2))
 
 participant_score[,"score"] = rescale(participant_score$score, to=c(0,1))
 
