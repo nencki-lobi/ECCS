@@ -32,7 +32,7 @@ plot.fig9a = function(data) {
     xlab("Mean ratings in Study 1 in Poland (convenience sampling)") + ylab("Mean ratings in Study 2 in Poland (purposive sampling)") +
     scale_color_manual(values = colors_categories, name = "Story type") +
     geom_abline(aes(intercept = 0, slope = 1)) +
-    geom_label(data = subset(data, abs(`mean.Study 1` - `mean.Study 2`) > 25), show.legend = FALSE) +
+    #geom_label(data = subset(data, abs(`mean.Study 1` - `mean.Study 2`) > 25), show.legend = FALSE) +
     beauty
 }
 
@@ -43,7 +43,7 @@ plot.fig9b = function(data) {
     xlab("Mean ratings in Study 2 in Poland (purposive sampling)") + ylab("Mean ratings in Study 3 in Norway (purposive sampling)") +
     scale_color_manual(values = colors_categories, name = "Story type") +
     geom_abline(aes(intercept = 0, slope = 1)) +
-    geom_label(data = subset(data, abs(`mean.Study 2` - `mean.Study 3`) > 25), show.legend = FALSE) +
+    #geom_label(data = subset(data, abs(`mean.Study 2` - `mean.Study 3`) > 25), show.legend = FALSE) +
     beauty
 }
 
@@ -64,11 +64,23 @@ for (i in 0:6) {
 
 ### Wrapped plots
 p = plot.fig9a(df) +
-  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
-  labs(title = "Differences in mean ratings of stories on each scale")
-ggsave("Fig 9a - Comparison of story ratings between Study 1 and Study 2 - Facet by scale.png", p, width = 15, height = 10, path = osubdir)
+  facet_wrap(~part, ncol = 2, labeller = as_labeller(part_to_scale)) + 
+  labs(title = "Differences in mean ratings of stories on each scale") +
+  theme(plot.title = element_text(size=22),
+        strip.text.x = element_text(size = 14),
+        axis.title = element_text(size=14),
+        axis.text = element_text(size=12),
+        legend.title = element_text(size=12),
+        legend.text = element_text(size=12))
+ggsave("Fig 9a - Comparison of story ratings between Study 1 and Study 2 - Facet by scale.png", p, width = 10, height = 15, path = osubdir)
 
 p = plot.fig9b(df) +
-  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
-  labs(title = "Differences in mean ratings of stories on each scale")
-ggsave("Fig 9b - Comparison of story ratings between Study 2 and Study 3 - Facet by scale.png", p, width = 15, height = 10, path = osubdir)
+  facet_wrap(~part, ncol = 2, labeller = as_labeller(part_to_scale)) + 
+  labs(title = "Differences in mean ratings of stories on each scale") +
+  theme(plot.title = element_text(size=22),
+        strip.text.x = element_text(size = 14),
+        axis.title = element_text(size=14),
+        axis.text = element_text(size=12),
+        legend.title = element_text(size=12),
+        legend.text = element_text(size=12))
+ggsave("Fig 9b - Comparison of story ratings between Study 2 and Study 3 - Facet by scale.png", p, width = 10, height = 15, path = osubdir)

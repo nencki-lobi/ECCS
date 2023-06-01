@@ -348,14 +348,22 @@ colnames(df) = c("ord", "category", "class", labels_scales)
 png(file.path(osubdir, "scatterplot-matrix.png"),
     width=12, height=12, units="in", res=300)
 
-par(mar=c(4,4,1,1))
-
 pairs(df[,4:10], pch = 19, cex = 1,
       col = colors[df$class],
       cex.labels = 2, 
       cex.axis = 2,
       xlim = c(0,100),
       ylim = c(0,100),
-      upper.panel=NULL)
+      upper.panel=NULL,
+      oma=c(12,3,3,3))
+
+par(xpd = TRUE)
+
+legend("bottom", horiz = TRUE,
+       inset = -0.01,
+       cex = 1.2, text.width = NA,
+       legend = c(levels(df$class)),
+       bty = "n",
+       pch = 16, col = colors)
 
 dev.off()
