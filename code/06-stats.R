@@ -85,16 +85,8 @@ df = stories %>%
 sink(file = file.path(psubdir,"Differences - story length across categories.txt"), type ="output")
 
 print.me("Polish stories - summary statistics", summary(df$len_PL))
-print.me("Polish stories - difference in story length across categories (ANOVA & Tukey post-hocs)", 
-         get.anova.with.posthocs(df, "len_PL", "category"))
-
 print.me("English stories - summary statistics", summary(df$len_EN))
-print.me("English stories - difference in story length across categories (ANOVA & Tukey post-hocs)", 
-         get.anova.with.posthocs(df, "len_EN", "category"))
-
 print.me("Norwegian stories - summary statistics", summary(df$len_NO))
-print.me("Norwegian stories - difference in story length across categories (ANOVA & Tukey post-hocs)", 
-         get.anova.with.posthocs(df, "len_NO", "category"))
 
 sink(file = NULL)
 
@@ -137,25 +129,6 @@ print.me("Shapiro-Wilk normality of ratings distribution - Study 2", check.norma
 print.me("Shapiro-Wilk normality of ratings distribution - Study 3", check.normality(df,"scale","mean.Study 3"))
 print.me("Correlations of mean ratings on each of the scales between Study 1 and Study 2", get.correlations(df,"scale","mean.Study 1","mean.Study 2"))
 print.me("Correlations of mean ratings on each of the scales between Study 2 and Study 3", get.correlations(df,"scale","mean.Study 2","mean.Study 3"))
-sink(file = NULL)
-
-# Correlations of times between studies
-
-df = mean_times %>%
-  pivot_wider(id_cols = c("ord", "code", "category"),
-              names_from = "study",
-              names_sep = ".",
-              names_sort = T,
-              values_from = c("mean_pres","mean_eval", "n"))
-
-sink(file = file.path(psubdir,"Correlations - mean times between studies.txt"), type ="output")
-print.me("Summary statistics (means)", get.means(mean_times, "study", "mean_pres", "mean_eval", "n"))
-print.me("Shapiro-Wilk normality of presentation time distribution", check.normality(mean_times,"study","mean_pres"))
-print.me("Shapiro-Wilk normality of evaluation time distribution", check.normality(mean_times,"study","mean_eval"))
-print.me("Correlations of presentation times between Study 1 and Study 2", get.correlations(df,"category","mean_pres.Study 1","mean_pres.Study 2"))
-print.me("Correlations of evaluation times between Study 1 and Study 2", get.correlations(df,"category","mean_eval.Study 1","mean_eval.Study 2"))
-print.me("Correlations of presentation times between Study 2 and Study 3", get.correlations(df,"category","mean_pres.Study 2","mean_pres.Study 3"))
-print.me("Correlations of evaluation times between Study 2 and Study 3", get.correlations(df,"category","mean_eval.Study 2","mean_eval.Study 3"))
 sink(file = NULL)
 
 # Comparison of mean ratings for each story type across studies

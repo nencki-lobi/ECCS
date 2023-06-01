@@ -192,40 +192,6 @@ p = filter(df, !(part %in% c("Valence", "Arousal"))) %>% plot.fig3 +
   labs(title = "Mean ratings on each of the scales") +
   scale_x_discrete(labels = NULL)
 ggsave("Fig 3b - Category ratings - Facet by scale & study.png", p, width = 8, height = 10, path = osubdir)
-
-## Plot mean ratings for each story with stories ordered by ratings
-
-fdir = fdir.create("Fig 4 - Story ratings ordered")
-
-df = story_mean_ratings %>%
-  group_by(part) %>% arrange(mean, .by_group = TRUE) %>% ungroup() %>%
-  mutate(index = rep(ords, 7))
-
-plot.fig4 = function(data) {
-  ggplot(data, aes(x=index, y=mean, fill = category)) +
-    geom_bar(stat = "identity", na.rm = TRUE) +
-    scale_x_discrete(labels = NULL) +
-    xlab("Stories (ordered)") + ylab("Mean ratings") +
-    scale_fill_manual(name = "Story type", values = colors_categories) +
-    beauty + theme(aspect.ratio = 0.3, axis.ticks.x=element_blank())
-}
-
-### Separate plots
-for(i in 0:6) {
-  subdf = filter(df, part == i)
-  
-  p = plot.fig4(subdf) +
-    labs(title = paste("Mean ratings on", tolower(labels_scales[i+1]), "scale")) +
-    theme(legend.position = "none")
-  ggsave(paste0(labels_scales[i+1], ".png"), p, path = fdir)
-}
-
-### Wrapped plot
-p = plot.fig4(df) +
-  facet_wrap(~part, ncol = 2, labeller = as_labeller(part_to_scale)) +
-  labs(title ="Mean ratings on each of the scales") +
-  theme(panel.spacing = unit(2, "lines")) 
-ggsave("Fig 4 - Story ratings ordered - Facet by scale.png", p, width = 16, height = 10, path = osubdir)
   
 ## Plot mean valence and arousal ratings for each story
 
@@ -288,28 +254,6 @@ p = ggplot(df, aes(x=valence, y=arousal, colour=category))+
   labs(title = "Mean valence and arousal for each story type") + beauty
 ggsave("Fig 5 - Correlation between valence & arousal - Facet by study.png", p, width = 8, height = 3, path = osubdir)
 
-## Create a martix of scatterplots to inspect relationships between rating scales
-
-df = transposed_story_mean_ratings %>%
-  select("ord", "category", starts_with("mean."))
-
-colnames(df) = c("ord", "category", labels_scales)
-
-png(file.path(osubdir, "Fig 6 - Correlations among all the scales.png"),
-    width=12, height=12, units="in", res=300)
-
-par(mar=c(4,4,1,1))
-
-pairs(df[,labels_scales], pch = 19, cex = 1,
-      col = colors_categories[df$category],
-      cex.labels = 2, 
-      cex.axis = 2,
-      xlim = c(0,100),
-      ylim = c(0,100),
-      upper.panel=NULL)
-
-dev.off()
-
 ## Plot how climate change concern impacts story ratings
 
 df = full_join(participant_score, select(transposed_demo, "sid", "concern", "concern_group")) %>%
@@ -340,37 +284,3 @@ p = p + facet_wrap(~category) +
   theme(aspect.ratio = 1.5,
         axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))
 ggsave("Fig 7b - Ratings by CC concern.png", p, path = osubdir)
-
-## Plot comparison of mean ratings in male and female samples
-
-fdir = fdir.create("Fig 8 - Ratings by gender")
-
-df = full_join(story_mean_ratings_M, story_mean_ratings_F, 
-               by = c("ord","code","category","part"), 
-               suffix = c(".m", ".w")) %>%
-  select("ord","code","category","part","mean.m","mean.w")
-
-plot.fig8 = function(data) {
-  ggplot(data, aes(x = mean.m, y = mean.w, label = code, colour=category)) +
-    geom_point() +
-    xlim(c(-1,100)) + ylim(c(-1,100)) +
-    xlab("Mean ratings in male sample") + ylab("Mean ratings in female sample") +
-    scale_color_manual(values = colors_categories, name = "Story type") +
-    geom_abline(aes(intercept = 0, slope = 1)) +
-    geom_label(data = subset(data, abs(mean.w - mean.m) > 25), show.legend = FALSE) +
-    beauty
-}
-
-### Separate plots
-for (i in 0:6) {
-  subdf = filter(df, part == i)
-  p = plot.fig8(subdf) +
-    labs(title = paste("Gender differences in mean ratings of stories on", tolower(labels_scales[i+1]) , "scale"))
-  ggsave(paste0(part_to_scale[i+1], ".png"), p, path = fdir)
-}
-
-### Wrapped plots
-p = plot.fig8(df) +
-  facet_wrap(~part, ncol = 4, labeller = as_labeller(part_to_scale)) + 
-  labs(title = "Gender differences in mean ratings of stories on each scale")
-ggsave("Fig 8 - Ratings by gender - Facet by scale.png", p, width = 15, height = 10, path = osubdir)
