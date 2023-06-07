@@ -88,12 +88,36 @@ check.normality = function(df, gvar, val) {
     print.data.frame(row.names = F)
 }
 
+# Summary statistics for story length
+
+df = stories %>%
+  mutate(len_PL = nchar(PL), len_EN = nchar(EN), len_NO = nchar(NO))
+
+sink(file = file.path(osubdir,"Summary statistics for story length.txt"), type ="output") # HINT: Table S1 in the manuscript
+
+cat("\n", "Story length (number of characters) of Polish stories:", "\n", "\n")
+as.data.frame(describe(df$len_PL)) %>%
+  select(n, mean, sd, min, max) %>%
+  print.data.frame(row.names = F)
+
+cat("\n", "Story length (number of characters) of Norwegian stories:", "\n", "\n")
+as.data.frame(describe(df$len_NO)) %>%
+  select(n, mean, sd, min, max) %>%
+  print.data.frame(row.names = F)
+
+cat("\n", "Story length (number of characters) of English stories:", "\n", "\n")
+as.data.frame(describe(df$len_EN)) %>%
+  select(n, mean, sd, min, max) %>%
+  print.data.frame(row.names = F)
+
+sink(file = NULL)
+
 # Summary statistics for demographic data
 
 df = transposed_demo %>%
   select(-c("sid", "code", "stid", "birth"))
 
-sink(file = file.path(osubdir, "Summary statistics for demographic data.txt"), type ="output") # HINT: Table S1 in the manuscript
+sink(file = file.path(osubdir, "Summary statistics for demographic data.txt"), type ="output") # HINT: Table S2 in the manuscript
 
 cat("\n", "Descriptive statistics by study:", "\n", "\n")
 
@@ -111,16 +135,46 @@ print.me("Belief", get.tally(df, "study", "belief"))
 print.me("Concern group", get.tally(df, "study", "concern_group"))
 sink(file = NULL)
 
-# Summary statistics for story length
+# General information about the collected ratings
 
-df = stories %>%
-  mutate(len_PL = nchar(PL), len_EN = nchar(EN), len_NO = nchar(NO))
+sink(file = file.path(osubdir, "General information about the collected ratings.txt"), type ="output") # HINT: Table S3 in the manuscript
 
-sink(file = file.path(osubdir,"Summary statistics for story length.txt"), type ="output") # HINT: Table S2 in the manuscript
+cat("\n", "Total number of ratings:", "\n", "\n")
+story_mean_ratings_study %>%
+  group_by(study) %>%
+  summarise(n = sum(n)) %>%
+  print.data.frame(row.names = F)
 
-print.me("Polish stories - summary statistics", summary(df$len_PL))
-print.me("English stories - summary statistics", summary(df$len_EN))
-print.me("Norwegian stories - summary statistics", summary(df$len_NO))
+cat("\n", "Number of stories rated per participant:", "\n", "\n")
+ranking %>% 
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
+                        levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
+  group_by(study) %>% 
+  summarise(n = n(), M = mean(rank), SD = sd(rank), min = min(rank), max = max(rank)) %>%
+  print.data.frame(row.names = F)
+
+cat("\n", "Story presentation and evaluation times:", "\n", "\n")
+times_cleaned %>%
+  mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
+                        levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
+  group_by(study) %>% 
+  summarise(M.pres = mean(pres_time), M.eval = mean(eval_time)) %>%
+  print.data.frame(row.names = F)
+
+cat("\n", "Number of ratings per story:", "\n", "\n")
+story_mean_ratings %>% 
+  filter(part == 0) %>% 
+  select(ord, code, category, n) %>% 
+  summarise(M = mean(n), min = min(n), max = max(n)) %>%
+  print.data.frame(row.names = F)
+
+cat("\n", "Number of ratings per story (by study):", "\n", "\n")
+story_mean_ratings_study %>% 
+  filter(part == 0) %>% 
+  select(ord, code, category, study, n) %>%
+  group_by(study) %>%
+  summarise(M = mean(n), min = min(n), max = max(n)) %>%
+  print.data.frame(row.names = F)
 
 sink(file = NULL)
 
@@ -209,7 +263,7 @@ print.me("HOP", posthoc_results %>% filter(group1 == "HOP:Study 2" & group2 == "
 
 sink(file = NULL)
 
-sink(file = file.path(osubdir,"Difference in summary emotion score across concern groups.txt"), type = "output") # HINT: Associated with Figure 3 in the manuscript
+sink(file = file.path(osubdir,"Relationship between summary emotion score and climate change concern.txt"), type = "output") # HINT: Associated with Figure 3 in the manuscript
 
 # Difference in summary emotion score across concern groups
 
