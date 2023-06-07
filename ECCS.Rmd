@@ -31,4 +31,7 @@ if (params$studies == "c(13,14,15,17)") {
 if (params$studies == "c(13,14,15)") {
   source('./code/07-classification.R', local = knitr::knit_global())
   }
+if (params$studies == "c(13,14,15,17)") {
+  source('./code/08-ratings.R', local = knitr::knit_global())
+  }
 ```

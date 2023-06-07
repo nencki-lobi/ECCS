@@ -1,6 +1,6 @@
 # Load data
 
-items = read.table("./data/rtask-items.tsv", header = F, sep = "\t", quote = "", encoding = "UTF-8")
+items = read.table("./ECCS-stories.tsv", header = F, sep = "\t", quote = "", encoding = "UTF-8")
 colnames(items) = c("PL", "EN", "NO", "code")
 
 subjects = read.table("./data/rtask-subject.csv", header = F, skip = 2, sep = "|", strip.white = T, encoding = "UTF-8")

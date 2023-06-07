@@ -128,11 +128,19 @@ story_mean_ratings_study = ratings %>%
   mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
                         levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   group_by(ord, part, study) %>%
-  summarise(mean = mean(opt), n = n()) %>%
+  summarise(mean = mean(opt), sd = sd(opt), n = n()) %>%
   mutate(code = ord_to_code[as.character(ord)]) %>%
   mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category", "part") %>%
   ungroup()
+
+transposed_mean_ratings_study = story_mean_ratings_study %>%
+  mutate(scale = factor(part_to_scale[as.character(part)], levels = labels_scales)) %>%
+  pivot_wider(id_cols = c("ord", "code", "category"),
+              names_from = c("scale", "study"),
+              names_sep = ".",
+              names_sort = T,
+              values_from = c("mean", "sd", "n"))
 
 # For each story obtain demographic profile
 
