@@ -25,8 +25,6 @@ names(ord_to_category) = ords
 part_to_scale = labels_scales
 names(part_to_scale) = parts
 
-categories = ord_to_category[as.character(ords)]
-
 # How to use: 
 # code_to_ord["GUI2"]
 # ord_to_code["0"]
@@ -36,3 +34,13 @@ beauty = theme_linedraw() + theme(panel.grid = element_blank(),
                                   strip.background = element_rect(fill = "white", color = "white"),
                                   strip.text = element_text(colour = "black", size = 12),
                                   aspect.ratio = 1)
+
+# Save helpers
+
+if (!dir.exists("./output")) {dir.create("./output")}
+
+helpers = c("ords", "parts", "code_to_ord", "ord_to_code", "ord_to_category", "part_to_scale",
+        "labels_scales", "labels_emotion_scales", "labels_categories", "labels_classes",
+        "colors_categories", "colors_classes", "beauty")
+
+save(list = helpers, file = "./output/helpers.RData")

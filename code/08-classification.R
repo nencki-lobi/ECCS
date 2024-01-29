@@ -7,14 +7,10 @@
 
 # Classification
 
-if (!dir.exists("./output")) {dir.create("./output")}
-
 odir = "./output/classification"
 if (!dir.exists(odir)) {dir.create(odir)}
 
-osubdir = file.path(odir, paste0(
-  "studies-", paste(studies, collapse = "-"),
-  "-required-", as.character(required),
+osubdir = file.path(odir, paste0(infix,
   "-l-", str_replace_all(params$l, ",", "-"),
   "-k-", as.character(params$k)))
 if (!dir.exists(osubdir)) {dir.create(osubdir)}

@@ -2,7 +2,7 @@
 
 ## Study 1
 
-ECCS.S1 = transposed_mean_ratings_study %>% 
+ECCS.S1 = transposed_story_mean_ratings_study %>% 
   select("ord", "code", "category", contains("Study 1")) %>%
   rename(n = starts_with("n.Valence")) %>%
   select(-starts_with("n.")) %>%
@@ -15,7 +15,7 @@ write.table(ECCS.S1, file="./ECCS-ratings-S1.tsv", row.names = F, col.names = T,
 
 ## Study 2
 
-ECCS.S2 = transposed_mean_ratings_study %>% 
+ECCS.S2 = transposed_story_mean_ratings_study %>% 
   select("ord", "code", "category", contains("Study 2")) %>%
   rename(n = starts_with("n.Valence")) %>%
   select(-starts_with("n.")) %>%
@@ -28,7 +28,7 @@ write.table(ECCS.S2, file="./ECCS-ratings-S2.tsv", row.names = F, col.names = T,
 
 ## Study 3
 
-ECCS.S3 = transposed_mean_ratings_study %>% 
+ECCS.S3 = transposed_story_mean_ratings_study %>% 
   select("ord", "code", "category", contains("Study 3")) %>%
   rename(n = starts_with("n.Valence")) %>%
   select(-starts_with("n.")) %>%

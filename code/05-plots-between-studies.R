@@ -7,14 +7,10 @@
 
 # Plots (between studies)
 
-if (!dir.exists("./output")) {dir.create("./output")}
-
 odir = "./output/plots-and-stats"
 if (!dir.exists(odir)) {dir.create(odir)}
 
-osubdir = file.path(odir, paste0(
-  "studies-", paste(studies, collapse = "-"),
-  "-required-", as.character(required)))
+osubdir = file.path(odir, infix)
 if (!dir.exists(osubdir)) {dir.create(osubdir)}
 
 fdir.create = function(name) {

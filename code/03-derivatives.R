@@ -96,32 +96,6 @@ transposed_story_mean_ratings = story_mean_ratings %>%
               names_sort = T,
               values_from = c("mean", "n"))
 
-## Male sample
-
-demo_M = filter(transposed_demo, transposed_demo$sex == "1")
-ratings_M = filter(ratings, ratings$sid %in% demo_M$sid)
-
-story_mean_ratings_M = ratings_M %>%
-  group_by(ord, part) %>%
-  summarise(mean = mean(opt), n = n()) %>%
-  mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
-  relocate("ord", "code", "category", "part") %>%
-  ungroup()
-
-## Female sample
-
-demo_F = filter(transposed_demo, transposed_demo$sex == "0")
-ratings_F = filter(ratings, ratings$sid %in% demo_F$sid)
-
-story_mean_ratings_F = ratings_F %>%
-  group_by(ord, part) %>%
-  summarise(mean = mean(opt), n = n()) %>%
-  mutate(code = ord_to_code[as.character(ord)]) %>%
-  mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
-  relocate("ord", "code", "category", "part") %>%
-  ungroup()
-
 ## Different studies
 
 story_mean_ratings_study = ratings %>%
@@ -134,35 +108,13 @@ story_mean_ratings_study = ratings %>%
   relocate("ord", "code", "category", "part") %>%
   ungroup()
 
-transposed_mean_ratings_study = story_mean_ratings_study %>%
+transposed_story_mean_ratings_study = story_mean_ratings_study %>%
   mutate(scale = factor(part_to_scale[as.character(part)], levels = labels_scales)) %>%
   pivot_wider(id_cols = c("ord", "code", "category"),
               names_from = c("scale", "study"),
               names_sep = ".",
               names_sort = T,
               values_from = c("mean", "sd", "n"))
-
-# For each story obtain demographic profile
-
-subjects.ords = select(ratings, sid, code, stid, ord) %>% distinct()
-
-story_sex_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
-  group_by(ord, sex) %>%
-  summarise(n = n()) %>%
-  pivot_wider(id_cols = "ord",
-              names_from = sex,
-              names_sep = ".",
-              values_from = "n") %>%
-  ungroup()
-
-story_concern_count = full_join(subjects.ords, transposed_demo, by = "sid") %>%
-  group_by(ord, concern) %>%
-  summarise(n = n()) %>%
-  pivot_wider(id_cols = "ord",
-              names_from = concern,
-              names_sep = ".",
-              values_from = "n") %>%
-  ungroup()
 
 # For each participant calculate mean ratings for each stimulus category and each rating scale
 
@@ -210,7 +162,7 @@ times_cleaned = intersect(remove_outliers(times, "pres_time"),
 times_to_say_goodbye = setdiff(remove_outliers(times, "pres_time"), 
                                remove_outliers(times, "eval_time"))
 
-mean_times = times_cleaned %>%
+story_mean_times = times_cleaned %>%
   mutate(study = factor(recode(stid, "13"="Study 1", "14"="Study 1", "15"="Study 2", "17"="Study 3"),
                         levels = c("Study 1", "Study 2", "Study 3")), .after = stid) %>%
   group_by(study, ord) %>%
@@ -219,3 +171,21 @@ mean_times = times_cleaned %>%
   mutate(category = factor(ord_to_category[as.character(ord)], levels = labels_categories)) %>%
   relocate("ord", "code", "category", "study", "mean_pres", "mean_eval", "n") %>%
   ungroup()
+
+# Save derivatives
+
+odir = "./output/derivatives"
+if (!dir.exists(odir)) {dir.create(odir)}
+
+osubdir = file.path(odir, infix)
+if (!dir.exists(osubdir)) {dir.create(osubdir)}
+
+derivatives = c("items", "stories",
+                "subjects", "demo", "transposed_demo",
+                "ratings", "transposed_ratings",
+                "story_mean_ratings", "transposed_story_mean_ratings",
+                "story_mean_ratings_study", "transposed_story_mean_ratings_study",
+                "participant_mean_ratings", "participant_score",
+                "times", "times_cleaned", "story_mean_times")
+
+save(list = derivatives, file = file.path(osubdir, "derivatives.RData"))

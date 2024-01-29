@@ -3,7 +3,9 @@ title: "Emotional Climate Change Stories (ECCS)"
 output: html_document
 params:
   studies: c(13,14,15,17)
-  required: 10
+  recompute: TRUE
+  figures: TRUE
+  classification: FALSE
   l: ANG,COM,HOP,NEU
   k: 9
 ---
@@ -19,19 +21,34 @@ library('psych')
 library("scales")
 
 set.seed(2137) # set seed for replicability
+```
 
-source('./code/01-preproc.R', local = knitr::knit_global())
-source('./code/02-helpers.R', local = knitr::knit_global())
-source('./code/03-derivatives.R', local = knitr::knit_global())
-source('./code/04-plots-within-studies.R', local = knitr::knit_global())
-if (params$studies == "c(13,14,15,17)") {
+```{r include=FALSE, echo=FALSE}
+studies = eval(parse(text = params$studies))
+infix = paste0("studies-", paste(studies, collapse = "-"))
+
+helpers = file.path("./output/helpers.RData")
+derivatives = file.path("./output/derivatives", infix, "derivatives.RData")
+```
+
+```{r include=FALSE, echo=FALSE}  
+if (params$recompute) {
+  source('./code/01-preproc.R', local = knitr::knit_global())
+  source('./code/02-helpers.R', local = knitr::knit_global())
+  source('./code/03-derivatives.R', local = knitr::knit_global())
+} else {
+  load(helpers)
+  load(derivatives)
+}
+
+if (params$figures){
+  source('./code/04-plots-within-studies.R', local = knitr::knit_global())
   source('./code/05-plots-between-studies.R', local = knitr::knit_global())
   source('./code/06-stats.R', local = knitr::knit_global())
-  }
-if (params$studies == "c(13,14,15)") {
-  source('./code/07-classification.R', local = knitr::knit_global())
-  }
-if (params$studies == "c(13,14,15,17)") {
-  source('./code/08-ratings.R', local = knitr::knit_global())
-  }
+  source('./code/07-ratings.R', local = knitr::knit_global())
+}
+
+if (params$classification){
+  source('./code/08-classification.R', local = knitr::knit_global())
+}
 ```

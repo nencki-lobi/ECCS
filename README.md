@@ -17,20 +17,23 @@ To download the ECCS dataset, use the following links:
 To reproduce the results described in the article, run:
 
 ```
-rmarkdown::render("ECCS.Rmd", params = list(studies = "c(13,14,15,17)"))
+rmarkdown::render("ECCS.Rmd")
 ```
 
 To perform the classification analysis, run:
 
 ```
-rmarkdown::render("ECCS.Rmd", params = list(studies = "c(13,14,15)"))
+rmarkdown::render("ECCS.Rmd", params = list(classification = TRUE, studies = "c(13,14,15)"))
 ```
 
 Alternatively, you can use `pwalk` to iterate over different sets of parameters, for instance:
 
 ```
-df = data.frame(studies = c("13", "14", "15", "17", "c(13,14)", "c(13,14,15,17)"))
-df %>% pwalk( ~ rmarkdown::render("ECCS.Rmd", params = list(studies = ..1)))
+df = data.frame(k = c(9, 12, 15))
+df %>% pwalk( ~ rmarkdown::render("ECCS.Rmd", params = list(classification = TRUE,
+                                                            studies = "c(13,14,15)", 
+                                                            l = "ANG,HOP,NEU", 
+                                                            k = ..1)))
 ```
 
 ## Obtaining data from the SQL database
