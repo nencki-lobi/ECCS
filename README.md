@@ -23,15 +23,18 @@ rmarkdown::render("ECCS.Rmd")
 To perform the classification analysis, run:
 
 ```
-rmarkdown::render("ECCS.Rmd", params = list(classification = TRUE, studies = "c(13,14,15)"))
+rmarkdown::render("ECCS.Rmd", params = list(studies = "c(13,14,15)", 
+                                            figures = FALSE, 
+                                            classification = TRUE))
 ```
 
 Alternatively, you can use `pwalk` to iterate over different sets of parameters, for instance:
 
 ```
 df = data.frame(k = c(9, 12, 15))
-df %>% pwalk( ~ rmarkdown::render("ECCS.Rmd", params = list(classification = TRUE,
-                                                            studies = "c(13,14,15)", 
+df %>% pwalk( ~ rmarkdown::render("ECCS.Rmd", params = list(studies = "c(13,14,15)",
+                                                            figures = FALSE,
+                                                            classification = TRUE,
                                                             l = "ANG,HOP,NEU", 
                                                             k = ..1)))
 ```
