@@ -4,7 +4,7 @@ This repository contains supplementary materials (data and code) associated with
 
 Please cite the corresponding publication when using these materials:
 
-Zaremba, D., Michałowski, J., Klöckner, C.A., Marchewka A., & Wierzba, M. (2023) Development and validation of Emotional Climate Change Stories (ECCS) stimuli set. PsyArXiv. [DOI:10.31234/osf.io/qx7hr](https://psyarxiv.com/qx7hr)
+> Zaremba, D., Michałowski, J.M., Klöckner, C.A., Marchewka A., & Wierzba, M. (2024) Development and validation of the Emotional Climate Change Stories (ECCS) stimuli set. Behavior Research Methods, 56, 3330–3345. [https://doi.org/10.3758/s13428-024-02408-1](https://doi.org/10.3758/s13428-024-02408-1)
 
 ## How to use
 
