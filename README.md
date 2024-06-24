@@ -1,4 +1,4 @@
-# ECCS
+# Emotional Climate Change Stories (ECCS)
 
 This repository contains supplementary materials (data and code) associated with the development of the Emotional Climate Change Stories (ECCS) dataset. The remaining supplementary materials can be found on the accompanying [OSF website](https://osf.io/v8hts/).
 
@@ -50,3 +50,8 @@ psql -U grieg -d grieg --file rtask.sql
 ## Requirements
 
 The following R packages are required: `broom`, `fields`, `htmlwidgets`, `plotly`, `psych`, `rmarkdown`, `rstatix`, `scales`, `tidyverse`.
+
+## Funding
+
+<img align="left" src="https://www.norwaygrants.si/wp-content/uploads/2021/12/Norway_grants@4x-913x1024.png" width=10% height=10%> 
+<br>The research leading to these results has received funding from the Norwegian Financial Mechanism 2014-2021, no. 2019/34/H/HS6/00677.
